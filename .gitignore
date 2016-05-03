@@ -1,0 +1,12 @@
+# user/machine specific settings
+.clang_complete
+.ycm_extra_conf.py*
+app/.dir-locals.el
+
+# IDE files
+CMakeLists.txt.user
+gravity-sfml.kdev4
+.kdev4/
+
+# generated files
+build/

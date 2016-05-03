@@ -1,0 +1,15 @@
+BasedOnStyle:  LLVM
+AlignAfterOpenBracket: true
+AllowShortFunctionsOnASingleLine: Empty
+AlwaysBreakTemplateDeclarations: true
+BinPackArguments: false
+ColumnLimit:     100
+CommentPragmas:  '(^ IWYU pragma:|^ TODO:|^ NOTE:|^ REMARK:)'
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ForEachMacros:   [ foreach, Q_FOREACH, BOOST_FOREACH ]
+KeepEmptyLinesAtTheStartOfBlocks: true
+PointerAlignment: Left
+Standard:        Cpp11
+TabWidth:        8
+UseTab:          Never
+
