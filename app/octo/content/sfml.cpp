@@ -1,19 +1,28 @@
 #include "sfml.hpp"
 #include "contentmanager.hpp"
+#include "music.hpp"
+#include "shader.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Font.hpp>
-#include <SFML/Audio/Sound.hpp>
+#include <SFML/Graphics/Shader.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Audio/Music.hpp>
 
+using namespace octo::content::sfml;
+
 void octo::content::sfml::registerSFMLLoaders(octo::content::ContentManager& manager) {
+  // "easy" SFML assets (completely loaded in memory, consisting of one file)
   registerSFMLLoader<sf::Texture>(manager);
   registerSFMLLoader<sf::Image>(manager);
   registerSFMLLoader<sf::Font>(manager);
-  registerSFMLLoader<sf::Sound>(manager);
-  registerSFMLLoader<sf::Music>(manager);
+  registerSFMLLoader<sf::SoundBuffer>(manager);
 
+  // music content requires some extra work to keep the underlying stream alive
+  manager.registerLoader<MusicContent>(std::make_unique<MusicLoader>());
 
-  // TODO: add other SFML content handlers
+  // shaders usually consist of two content files
+  manager.registerLoader<sf::Shader>(std::make_unique<ShaderLoader>());
+  
 }

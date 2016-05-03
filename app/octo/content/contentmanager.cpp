@@ -24,8 +24,7 @@ public:
 
 ContentManager::ContentManager() : m_impl(new Impl) {}
 
-ContentManager::~ContentManager()
-{
+ContentManager::~ContentManager() {
   delete m_impl;
 }
 
@@ -39,13 +38,15 @@ void ContentManager::registerLoader(const std::type_info& ContentType,
 }
 
 std::shared_ptr<void> ContentManager::load(const std::type_info& contentType,
-                                           const std::string& ContentId) {
+                                           const std::string& contentId, bool useCache) {
   using boost::format;
-  // check if content is still in cache and weak_ptr has not yet expired
-  auto contentIt = m_impl->contentCache.find(ContentId);
-  if (contentIt != m_impl->contentCache.end()) {
-    if (auto ContentPtr = (*contentIt).second.lock()) {
-      return ContentPtr;
+  if (useCache) {
+    // check if content is still in cache and weak_ptr has not yet expired
+    auto contentIt = m_impl->contentCache.find(contentId);
+    if (contentIt != m_impl->contentCache.end()) {
+      if (auto ContentPtr = (*contentIt).second.lock()) {
+        return ContentPtr;
+      }
     }
   }
 
@@ -53,15 +54,11 @@ std::shared_ptr<void> ContentManager::load(const std::type_info& contentType,
   auto loaderIt = m_impl->loaders.find(contentType);
   if (loaderIt != m_impl->loaders.end()) {
     ContentLoader& loader = *(*loaderIt).second;
-    sf::FileInputStream fin;
-    // TODO: map Content id to filename
-    if (!fin.open(ContentId)) {
-      throw ContentLoadException(
-          boost::str(format("could not open Content file for Content '%s'") % ContentId));
+    auto contentPtr = loader.load(*this, contentId);
+    if(useCache) {
+      m_impl->contentCache.insert(std::make_pair(contentId, contentPtr));
     }
-    auto ContentPtr = loader.load(fin);
-    m_impl->contentCache.insert(std::make_pair(ContentId, ContentPtr));
-    return ContentPtr;
+    return contentPtr;
   } else {
     throw ContentLoadException(
         boost::str(format("no Content loader for Content type '%s'") % contentType.name()));

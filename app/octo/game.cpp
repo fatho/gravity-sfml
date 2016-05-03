@@ -2,12 +2,15 @@
 #include "gamestate.hpp"
 #include "content/sfml.hpp"
 
+#include <boost/filesystem.hpp>
+
 using namespace octo;
 
 Game::Game() {
   // TODO: load settings
 
   // setup subsystems
+  m_content.setBasePath(boost::filesystem::current_path() / "assets");
   content::sfml::registerSFMLLoaders(m_content);
 
   // setup graphics

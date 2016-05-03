@@ -2,7 +2,7 @@
 
 #include "gamestate.hpp"
 
-#include "content/contentmanager.hpp"
+#include "content/filecontentmanager.hpp"
 
 #include <memory>
 #include <stack>
@@ -34,6 +34,6 @@ private:
   sf::RenderWindow m_window;
   std::stack<GameStatePtr> m_states;
 
-  content::ContentManager m_content;
+  content::FileContentManager m_content;
 };
 }

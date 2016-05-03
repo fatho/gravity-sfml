@@ -10,9 +10,11 @@
 namespace octo {
 namespace content {
 
+class ContentManager;
+
 class ContentLoader {
 public:
-  virtual std::shared_ptr<void> load(sf::InputStream& stream) = 0;
+  virtual std::shared_ptr<void> load(ContentManager& manager, const std::string& contentPath) = 0;
 
   virtual ~ContentLoader();
 };
@@ -28,9 +30,12 @@ public:
   ContentManager();
   ~ContentManager();
 
+public:
+  virtual std::unique_ptr<sf::InputStream> openDataStream(const std::string& contentPath) = 0;
+
   template <class AssetType>
-  std::shared_ptr<AssetType> load(const std::string& assetId) {
-    return load(typeid(AssetType), assetId);
+  std::shared_ptr<AssetType> load(const std::string& assetId, bool useCache = true) {
+    return load(typeid(AssetType), assetId, useCache);
   }
 
   template <class AssetType>
@@ -40,7 +45,7 @@ public:
 
   void registerLoader(const std::type_info& assetType, std::unique_ptr<ContentLoader>);
 
-  std::shared_ptr<void> load(const std::type_info& assetType, const std::string& assetId);
+  std::shared_ptr<void> load(const std::type_info& assetType, const std::string& assetId, bool useCache);
 
 private:
   class Impl;

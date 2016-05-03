@@ -10,21 +10,23 @@ class ContentManager;
 namespace sfml {
 
 template<typename ContentType>
-class SFMLLoader : public ContentLoader {
+class BasicSFMLLoader : public ContentLoader {
   // ContentLoader interface
 public:
-  std::shared_ptr<void> load(sf::InputStream& stream) override {
+  std::shared_ptr<void> load(ContentManager& manager, const std::string& contentPath) override {
+    auto stream = manager.openDataStream(contentPath);
     auto content = std::make_shared<ContentType>();
-    if (!content->loadFromStream(stream)) {
+    if (stream && content->loadFromStream(*stream)) {
+      return content;
+    } else {
       throw ContentLoadException("failed to load content");
     }
-    return content;
   }
 };
 
 template<typename ContentType>
 static void registerSFMLLoader(octo::content::ContentManager& manager) {
-  manager.registerLoader<ContentType>(std::make_unique<SFMLLoader<ContentType>>());
+  manager.registerLoader<ContentType>(std::make_unique<BasicSFMLLoader<ContentType>>());
 }
 
 void registerSFMLLoaders(content::ContentManager& manager);
