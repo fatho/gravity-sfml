@@ -13,5 +13,8 @@ set(SOURCES
   octo/gamestate.cpp)
 
 add_executable(gravity ${SOURCES})
-target_include_directories(gravity PRIVATE ${PROJECT_SOURCE_DIR} ${SFML_INCLUDE_DIR} ${Boost_INCLUDE_DIRS})
+target_include_directories(gravity PRIVATE
+  ${PROJECT_SOURCE_DIR}
+  ${SFML_INCLUDE_DIR}
+  ${Boost_INCLUDE_DIRS})
 target_link_libraries(gravity fmtlog ${SFML_LIBRARIES} ${Boost_LIBRARIES})
