@@ -10,3 +10,5 @@ gravity-sfml.kdev4
 
 # generated files
 build/
+cscope.files
+cscope.out
