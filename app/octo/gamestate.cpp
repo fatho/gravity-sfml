@@ -4,18 +4,26 @@
 
 using namespace octo;
 
-GameState::GameState(Game& game) : m_game(game) {}
-
-Game& GameState::game() {
+Game* GameState::game() {
   return m_game;
 }
 
+void GameState::setGame(Game* game) {
+  m_game = game;
+}
+
+void GameState::added() {}
+
+void GameState::removed() {}
+
+void GameState::activated() {}
+
+void GameState::deactivated() {}
+
 GameState::~GameState() {}
 
-NullState::NullState(Game& game) : GameState(game) {}
-
 void NullState::handleEvents() {
-  sf::RenderWindow& window = game().window();
+  sf::RenderWindow& window = game()->window();
   sf::Event event;
   while (window.pollEvent(event)) {
     if (event.type == sf::Event::Closed)
