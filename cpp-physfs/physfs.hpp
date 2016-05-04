@@ -50,6 +50,16 @@ enum SearchPathInsertion {
  */
 class Mount {
 public:
+  /** Initializes mount handle without mounting.
+   */
+  Mount();
+
+  Mount(const Mount&) = delete;
+  Mount& operator=(const Mount&) = delete;
+
+  Mount(Mount&& other);
+  Mount& operator=(Mount&&);
+
   /**
    * @brief Mounts an archive to a virtual path.
    * @param archive_path The physical path to the archive.
@@ -58,6 +68,20 @@ public:
    */
   Mount(boost::filesystem::path archive_path, std::string mount_point,
         SearchPathInsertion insertion_point);
+
+  /**
+   * @brief Mounts an archive to a virtual path.
+   * @param archive_path The physical path to the archive.
+   * @param mount_point The virtual path of the mount point.
+   * @param insertion_point Mount in the beginning or end of the search path.
+   */
+  void mount(boost::filesystem::path archive_path, std::string mount_point,
+             SearchPathInsertion insertion_point);
+
+
+  void unmount();
+
+  bool isMounted() const;
 
   /// @returns The physical path to the archive.
   const boost::filesystem::path& archivePath() const;

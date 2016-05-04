@@ -23,12 +23,49 @@ Initializer::~Initializer() {
   PHYSFS_deinit();
 }
 
+Mount::Mount() {
+}
+
 Mount::Mount(boost::filesystem::path archive_path, std::string mount_point,
-             SearchPathInsertion insertion_point)
-    : m_archivePath(archive_path), m_mountPoint(mount_point) {
+             SearchPathInsertion insertion_point) {
+  mount(archive_path, mount_point, insertion_point);
+}
+
+Mount::Mount(Mount&& other) {
+  std::swap(m_archivePath, other.m_archivePath);
+  std::swap(m_mountPoint, other.m_mountPoint);
+  assert(! other.isMounted());
+}
+
+Mount& Mount::operator=(Mount&& other) {
+  std::swap(m_archivePath, other.m_archivePath);
+  std::swap(m_mountPoint, other.m_mountPoint);
+  return *this;
+}
+
+void Mount::mount(boost::filesystem::path archive_path, std::string mount_point,
+                  SearchPathInsertion insertion_point) {
+  if(isMounted()) {
+    unmount();
+  }
+  m_archivePath = archive_path;
+  m_mountPoint = mount_point;
   PHYSFS_mount(archive_path.c_str(),
                mount_point.c_str(),
                insertion_point == SearchPathInsertion::append ? 1 : 0);
+}
+
+
+void Mount::unmount() {
+  if(isMounted()) {
+    PHYSFS_removeFromSearchPath(m_archivePath.c_str());
+    m_archivePath.clear();
+    m_mountPoint.clear();
+  }
+}
+
+bool Mount::isMounted() const {
+  return ! m_archivePath.empty();
 }
 
 const boost::filesystem::path& Mount::archivePath() const {
@@ -40,7 +77,7 @@ const std::string& Mount::mountPath() const {
 }
 
 Mount::~Mount() {
-  PHYSFS_removeFromSearchPath(m_archivePath.c_str());
+  unmount();
 }
 
 FileHandle open(const std::string& path, OpenMode mode) {
