@@ -12,7 +12,7 @@ Game::Game() {
   // TODO: load settings
 
   // setup subsystems
-  m_content.setBasePath(boost::filesystem::current_path() / "assets");
+  m_content.setBasePath(boost::filesystem::current_path() / ".." / "assets");
   content::sfml::registerSFMLLoaders(m_content);
 
   // setup graphics

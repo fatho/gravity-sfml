@@ -1,6 +1,7 @@
 
 find_package(Boost 1.60 REQUIRED filesystem)
 find_package(SFML 2.3 COMPONENTS graphics window audio system)
+find_package(EntityX REQUIRED)
 
 set(SOURCES
   main.cpp
@@ -10,11 +11,16 @@ set(SOURCES
   octo/content/sfml.cpp
   octo/content/shader.cpp
   octo/game.cpp
-  octo/gamestate.cpp)
+  octo/gamestate.cpp
+  octo/game/world.cpp
+  octo/game/components/planet.cpp
+  octo/game/components/position.cpp
+  octo/game/systems/movement.cpp)
 
 add_executable(gravity ${SOURCES})
 target_include_directories(gravity PRIVATE
   ${PROJECT_SOURCE_DIR}
   ${SFML_INCLUDE_DIR}
-  ${Boost_INCLUDE_DIRS})
-target_link_libraries(gravity fmtlog ${SFML_LIBRARIES} ${Boost_LIBRARIES})
+  ${Boost_INCLUDE_DIRS}
+  ${ENTITYX_INCLUDE_DIR})
+target_link_libraries(gravity fmtlog ${SFML_LIBRARIES} ${Boost_LIBRARIES} ${ENTITYX_LIBRARY})
