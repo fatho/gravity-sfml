@@ -19,6 +19,19 @@ public:
 
   void run();
 
+  template<class StateType, typename... Args>
+  void pushNewState(Args&&... args) {
+    pushState(makeGameState<StateType>(std::forward<Args>(args)...));
+  }
+  void pushState(GameStatePtr state);
+  void popState();
+  template<class StateType, typename... Args>
+  void changeNewState(Args&&... args) {
+    changeState(makeGameState<StateType>(std::forward<Args>(args)...));
+  }
+  void changeState(GameStatePtr state);
+  GameStatePtr topState();
+
   //////////////////////////////////////////
   // accessors
 

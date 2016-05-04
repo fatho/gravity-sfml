@@ -17,7 +17,7 @@ Game::Game() {
   m_window.create(sf::VideoMode(800, 600), "Gravity");
   m_window.setVerticalSyncEnabled(true);
 
-  m_states.push(makeGameState<NullState>(*this));
+  pushNewState<NullState>(*this);
 }
 
 void Game::run() {
@@ -38,3 +38,22 @@ void Game::run() {
     m_window.display();
   }
 }
+
+
+void Game::pushState(GameStatePtr state) {
+  m_states.push(state);
+}
+
+void Game::popState() {
+  m_states.pop();
+}
+
+void Game::changeState(GameStatePtr state) {
+  popState();
+  pushState(state);
+}
+
+GameStatePtr Game::topState() {
+  return m_states.top();
+}
+
