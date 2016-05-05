@@ -1,0 +1,31 @@
+#pragma once
+
+#include "../game/world.hpp"
+#include "../gamestate.hpp"
+
+#include <memory>
+#include <SFML/Graphics/View.hpp>
+
+namespace octo {
+namespace states {
+
+class InGameState : public GameState {
+public:
+  InGameState();
+
+  void update(sf::Time elapsed) override;
+  void handleEvents() override;
+
+protected:
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+  void drawPlanets(sf::RenderTarget& target, sf::RenderStates states) const;
+
+  void activated() override;
+private:
+  std::unique_ptr<game::World> m_world;
+  sf::View m_view;
+};
+
+}
+}

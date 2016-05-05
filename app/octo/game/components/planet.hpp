@@ -14,6 +14,8 @@ struct Planet {
   /// the replication of the terrain image in VRAM (slow to modify/query)
   sf::Texture terrainTexture;
 
+  sf::Vector2f sizef() const;
+
   void updateTexture();
 };
 

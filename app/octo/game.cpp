@@ -2,8 +2,9 @@
 #include "gamestate.hpp"
 #include "content/sfml.hpp"
 
-#include <fmtlog/log.hpp>
+#include "states/ingamestate.hpp"
 
+#include <fmtlog/log.hpp>
 #include <boost/filesystem.hpp>
 
 using namespace octo;
@@ -12,14 +13,14 @@ Game::Game() {
   // TODO: load settings
 
   // setup subsystems
-  m_content.setBasePath(boost::filesystem::current_path() / ".." / "assets");
+  m_content.setBasePath(boost::filesystem::current_path() / "assets");
   content::sfml::registerSFMLLoaders(m_content);
 
   // setup graphics
   m_window.create(sf::VideoMode(800, 600), "Gravity");
   m_window.setVerticalSyncEnabled(true);
 
-  pushNewState<NullState>();
+  pushNewState<states::InGameState>();
 }
 
 void Game::run() {

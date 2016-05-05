@@ -9,3 +9,8 @@ void Planet::updateTexture() {
     this->terrainTexture.update(this->terrain);
   }
 }
+
+sf::Vector2f Planet::sizef() const {
+  sf::Vector2u size = terrain.getSize();
+  return { static_cast<float>(size.x), static_cast<float>(size.y) };
+}

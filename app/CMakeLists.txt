@@ -15,7 +15,9 @@ set(SOURCES
   octo/game/world.cpp
   octo/game/components/planet.cpp
   octo/game/components/position.cpp
-  octo/game/systems/movement.cpp)
+  octo/game/systems/movement.cpp
+  octo/states/ingamestate.cpp
+  )
 
 add_executable(gravity ${SOURCES})
 target_include_directories(gravity PRIVATE
