@@ -9,13 +9,14 @@ using namespace boost;
 std::shared_ptr<void> ShaderLoader::load(ContentManager& manager, const std::string& contentPath) {
   auto shader = std::make_shared<sf::Shader>();
 
-  auto vertexStream = manager.openDataStream(contentPath + ".vert");
-  auto fragmentStream = manager.openDataStream(contentPath + ".frag");
+  std::string vertexPath = contentPath + ".vert";
+  std::string fragmentPath = contentPath + ".frag";
 
   bool vertLoaded = false;
   bool fragLoaded = false;
 
-  if(vertexStream) {
+  if(manager.exists(vertexPath)) {
+    auto vertexStream = manager.openDataStream(vertexPath);
     if(shader->loadFromStream(*vertexStream, sf::Shader::Vertex)) {
       vertLoaded = true;
     } else {
@@ -23,7 +24,8 @@ std::shared_ptr<void> ShaderLoader::load(ContentManager& manager, const std::str
     }
   }
 
-  if(fragmentStream) {
+  if(manager.exists(fragmentPath)) {
+    auto fragmentStream = manager.openDataStream(fragmentPath);
     if(shader->loadFromStream(*fragmentStream, sf::Shader::Fragment)) {
       fragLoaded = true;
     } else {

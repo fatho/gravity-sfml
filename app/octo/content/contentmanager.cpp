@@ -16,9 +16,12 @@ ContentLoadException::ContentLoadException(const char* message) : std::runtime_e
 ContentLoadException::ContentLoadException(const std::string& message)
     : std::runtime_error(message) {}
 
+/// private implementation details of the ContentManager
 class ContentManager::Impl {
 public:
+  /// loader registration mapping a loader to an asset type
   std::unordered_map<std::type_index, std::unique_ptr<ContentLoader>> loaders;
+  /// weak pointer cache for content
   std::unordered_map<std::string, std::weak_ptr<void>> contentCache;
 };
 

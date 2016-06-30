@@ -1,12 +1,16 @@
 #include "physfscontentmanager.hpp"
 
 #include <cpp-physfs/physfs.hpp>
-#include <boost/format.hpp>
 
 using namespace octo::content;
-using namespace boost;
-using namespace boost::filesystem;
 
-std::unique_ptr<sf::InputStream> PhysFSContentManager::openDataStream(const std::string& contentPath) {
+std::unique_ptr<sf::InputStream>
+PhysFSContentManager::openDataStream(const std::string& contentPath) try {
   return std::make_unique<physfs::InputStream>(contentPath);
+} catch (physfs::IOException& ex) {
+  throw ContentLoadException(ex.what());
+}
+
+bool PhysFSContentManager::exists(const std::string& contentPath) {
+  return physfs::exists(contentPath);
 }

@@ -15,3 +15,5 @@ add_subdirectory(cpp-physfs)
 add_subdirectory(assets)
 # the actual game application
 add_subdirectory(app)
+# documentation
+add_subdirectory(doc)

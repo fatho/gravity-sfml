@@ -7,6 +7,7 @@ set(SOURCES
   main.cpp
   octo/content/contentmanager.cpp
   octo/content/filecontentmanager.cpp
+  octo/content/physfscontentmanager.cpp
   octo/content/music.cpp
   octo/content/sfml.cpp
   octo/content/shader.cpp
@@ -29,4 +30,4 @@ target_include_directories(gravity PRIVATE
   ${SFML_INCLUDE_DIR}
   ${Boost_INCLUDE_DIRS}
   ${ENTITYX_INCLUDE_DIR})
-target_link_libraries(gravity fmtlog ${SFML_LIBRARIES} ${Boost_LIBRARIES} ${ENTITYX_LIBRARY})
+target_link_libraries(gravity fmtlog cpp-physfs ${SFML_LIBRARIES} ${Boost_LIBRARIES} ${ENTITYX_LIBRARY})
