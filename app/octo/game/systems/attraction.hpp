@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../components/position.hpp"
-#include "../components/movable.hpp"
+#include "../components/attraction.hpp"
 
 #include <entityx/entityx.h>
 
@@ -9,7 +9,7 @@ namespace octo {
 namespace game {
 namespace systems {
 
-struct Movement : public entityx::System<Movement> {
+struct Attraction : public entityx::System<Attraction> {
   void update(entityx::EntityManager& es, entityx::EventManager&, entityx::TimeDelta dt) override;
 };
 

@@ -13,9 +13,13 @@ set(SOURCES
   octo/game.cpp
   octo/gamestate.cpp
   octo/game/world.cpp
+  octo/game/components/attraction.cpp
+  octo/game/components/dynamicbody.cpp
   octo/game/components/planet.cpp
   octo/game/components/position.cpp
-  octo/game/systems/movement.cpp
+  octo/game/systems/attraction.cpp
+  octo/game/systems/boundaryenforcer.cpp
+  octo/game/systems/physics.cpp
   octo/states/ingamestate.cpp
   )
 

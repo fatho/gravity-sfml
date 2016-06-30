@@ -25,6 +25,7 @@ Game::Game() {
 
 void Game::run() {
   sf::Clock clock;
+  // FIXME: this loop relies on being capped by VSync
   while (m_window.isOpen() && !m_states.empty()) {
 
     sf::Time elapsed = clock.restart();
@@ -90,4 +91,3 @@ void Game::changeState(GameStatePtr state) {
 GameStatePtr Game::topState() {
   return m_states.top();
 }
-

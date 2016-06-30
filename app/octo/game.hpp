@@ -19,13 +19,16 @@ public:
 
   void run();
 
-  template<class StateType, typename... Args>
+  //////////////////////////////////////////
+  // State management
+
+  template <class StateType, typename... Args>
   void pushNewState(Args&&... args) {
     pushState(makeGameState<StateType>(std::forward<Args>(args)...));
   }
   void pushState(GameStatePtr state);
   void popState();
-  template<class StateType, typename... Args>
+  template <class StateType, typename... Args>
   void changeNewState(Args&&... args) {
     changeState(makeGameState<StateType>(std::forward<Args>(args)...));
   }
@@ -33,7 +36,10 @@ public:
   GameStatePtr topState();
 
   //////////////////////////////////////////
-  // accessors
+  // Utility Functions
+
+  //////////////////////////////////////////
+  // Accessors
 
   sf::RenderWindow& window() {
     return m_window;

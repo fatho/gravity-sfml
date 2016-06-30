@@ -19,9 +19,13 @@ public:
 protected:
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+  void drawBackground(sf::RenderTarget& target, sf::RenderStates states) const;
   void drawPlanets(sf::RenderTarget& target, sf::RenderStates states) const;
+  void debugDraw(sf::RenderTarget& target, sf::RenderStates states) const;
 
   void activated() override;
+
+  void rebuildView();
 private:
   std::unique_ptr<game::World> m_world;
   sf::View m_view;
