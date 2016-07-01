@@ -12,8 +12,7 @@ namespace content {
  */
 class PhysFSContentManager : public ContentManager {
 public:
-
-  std::unique_ptr<sf::InputStream> openDataStream(const std::string& contentPath);
+  std::unique_ptr<sf::InputStream> openDataStream(const std::string& contentPath) override;
 
   bool exists(const std::string& contentPath) override;
 };

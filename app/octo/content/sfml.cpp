@@ -14,10 +14,10 @@ using namespace octo::content::sfml;
 
 void octo::content::sfml::registerSFMLLoaders(octo::content::ContentManager& manager) {
   // "easy" SFML assets (completely loaded in memory, consisting of one file)
-  registerSFMLLoader<sf::Texture>(manager);
-  registerSFMLLoader<sf::Image>(manager);
-  registerSFMLLoader<sf::Font>(manager);
-  registerSFMLLoader<sf::SoundBuffer>(manager);
+  registerBasicSFMLLoader<sf::Texture>(manager);
+  registerBasicSFMLLoader<sf::Image>(manager);
+  registerBasicSFMLLoader<sf::Font>(manager);
+  registerBasicSFMLLoader<sf::SoundBuffer>(manager);
 
   // music content requires some extra work to keep the underlying stream alive
   manager.registerLoader<MusicContent>(std::make_unique<MusicLoader>());

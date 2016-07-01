@@ -10,8 +10,9 @@ class ContentManager;
 namespace sfml {
 
 /*! \brief A generic content loader that works for most simple SFML content objects.
- *  Note that this class neither supports sf::Music, handled by MusicLoader instead,
- *  nor sf::Shader, handled by sf::Shader.
+ *  The know supported SFML classes are sf::Texture, sf::Image, sf::Font and sf::SoundBuffer.
+ *  \note This class neither supports sf::Music, which is instead handled by MusicLoader,
+ *  nor sf::Shader, handled by ShaderLoader.
  */
 template<typename ContentType>
 class BasicSFMLLoader : public ContentLoader {
@@ -28,10 +29,10 @@ public:
   }
 };
 
-/*! \brief Helper function for registering the default loader for a given SFML content type.
+/*! \brief Helper function for registering the default loader for a given basic SFML content type.
  */
 template<typename ContentType>
-static void registerSFMLLoader(octo::content::ContentManager& manager) {
+static void registerBasicSFMLLoader(octo::content::ContentManager& manager) {
   manager.registerLoader<ContentType>(std::make_unique<BasicSFMLLoader<ContentType>>());
 }
 
