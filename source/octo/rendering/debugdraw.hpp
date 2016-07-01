@@ -19,13 +19,15 @@ public:
     return m_shape;
   }
 
-  void fill(sf::Color color) {
+  DrawBuilder<ShapeType>& fill(sf::Color color) {
     m_shape.setFillColor(color);
+    return *this;
   }
 
-  void outline(float thickness, sf::Color color) {
+  DrawBuilder<ShapeType>& outline(float thickness, sf::Color color) {
     m_shape.setOutlineThickness(thickness);
     m_shape.setOutlineColor(color);
+    return *this;
   }
 
   void draw() {

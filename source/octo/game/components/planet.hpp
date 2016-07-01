@@ -8,6 +8,8 @@ namespace octo {
 namespace game {
 namespace components {
 
+/*! \brief Component defining a planet, consisting of its terrain mask and texture.
+ */
 struct Planet {
   /// the image of the terrain used for physics
   sf::Image terrain;
@@ -16,6 +18,9 @@ struct Planet {
 
   sf::Vector2f sizef() const;
 
+  /*! \brief Updates the texture in VRAM to reflect changes made to the terrain.
+   *
+   */
   void updateTexture();
 };
 

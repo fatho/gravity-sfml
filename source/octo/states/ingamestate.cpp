@@ -3,6 +3,7 @@
 #include "../game.hpp"
 #include "../game/components.hpp"
 #include "../rendering/debugdraw.hpp"
+#include <more-math/all.hpp>
 
 #include <iostream>
 
@@ -15,13 +16,14 @@ InGameState::InGameState() {
   // TODO: take world as an argument
   m_world = std::make_unique<game::World>();
   m_world->setClipRadius(900);
-  /*
+
   m_world->addPlanet({300, 200}, 128, 30000);
   m_world->addPlanet({-150, -200}, 128, 30000);
   m_world->spawnDebugBullet({-300,-300}, {100, -100});
-  */
-  m_world->addPlanet({0, 0}, 128, 30000);
-  m_world->spawnDebugBullet({0,-400}, {0, 0});
+
+  // m_world->addPlanet({0, 0}, 128, 30000);
+  // m_world->spawnDebugBullet({0,-400}, {0, 0});
+
   // initial view shows everything
   float worldRadius = m_world->clipRadius();
   m_view.reset(sf::FloatRect(-worldRadius, - worldRadius, 2 * worldRadius, 2 * worldRadius));
@@ -62,12 +64,6 @@ void InGameState::draw(sf::RenderTarget& target, sf::RenderStates states) const 
 }
 
 void InGameState::drawBackground(sf::RenderTarget& target, sf::RenderStates states) const {
-  sf::CircleShape borderCircle(m_world->clipRadius(), 60);
-  borderCircle.setOutlineColor(sf::Color::Red);
-  borderCircle.setOutlineThickness(2);
-  borderCircle.setFillColor(sf::Color::Transparent);
-  borderCircle.setPosition(-m_world->clipRadius(), -m_world->clipRadius());
-  target.draw(borderCircle, states);
   // TODO: draw some nice starfield background
   // TODO: draw dangerous looking nebula outside/around world boundary instead of ugly circle
 }
@@ -82,23 +78,18 @@ void InGameState::drawPlanets(sf::RenderTarget& target, sf::RenderStates states)
 
 void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) const {
   rendering::DebugDraw debug(target, states, 1);
+
+  debug.circle(sf::Vector2f(), m_world->clipRadius()).outline(2, sf::Color::Red).draw();
+
   m_world->entities().each<Position>([&](entityx::Entity e, Position& pos) {
       auto planet = e.component<Planet>();
       auto body = e.component<DynamicBody>();
       if(planet) {
-        sf::RectangleShape planetRect;
-        planetRect.setOutlineColor(sf::Color::Blue);
-        planetRect.setOutlineThickness(1);
-        planetRect.setFillColor(sf::Color::Transparent);
-        planetRect.setSize(planet->sizef());
-        planetRect.setPosition(pos.position - planet->sizef() * 0.5f);
-        target.draw(planetRect, states);
+        debug.rectangle(math::rect::fromCenterSize(pos.position, planet->sizef()))
+          .outline(2, sf::Color::Blue).draw();
       }
       if(body) {
-        sf::CircleShape bodyCircle(4);
-        bodyCircle.setFillColor(sf::Color::Red);
-        bodyCircle.setPosition(pos.position.x - 4, pos.position.y - 4);
-        target.draw(bodyCircle, states);
+        debug.circle(pos.position, 4).fill(sf::Color::Red).draw();
       }
     });
 }
