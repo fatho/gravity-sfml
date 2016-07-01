@@ -4,7 +4,7 @@
 
 #include "states/ingamestate.hpp"
 
-#include <fmtlog/log.hpp>
+#include <fmtlog/fmtlog.hpp>
 #include <boost/filesystem.hpp>
 
 using namespace octo;

@@ -1,4 +1,4 @@
-#include "log.hpp"
+#include "fmtlog.hpp"
 
 #include <iostream>
 #include <chrono>

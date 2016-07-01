@@ -18,7 +18,7 @@
 #include <boost/iostreams/stream.hpp>
 #define __GNUC__
 
-/*! Namespace containing a modern C++ interface to PhysFS.
+/*! \brief Namespace containing a modern C++ interface to PhysFS.
  */
 namespace physfs {
 

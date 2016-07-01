@@ -1,7 +1,7 @@
 #include "boundaryenforcer.hpp"
 
 #include <cmath>
-#include <math/vector.hpp>
+#include <more-math/vector.hpp>
 
 using namespace octo::game::systems;
 

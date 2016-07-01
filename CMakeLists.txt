@@ -12,6 +12,6 @@ set(CMAKE_CXX_EXTENSIONS off)
 # might add assets/tools/etc. here later
 add_subdirectory(assets)
 # the actual game application
-add_subdirectory(app)
+add_subdirectory(source)
 # documentation
-add_subdirectory(doc)
+add_subdirectory(documentation)
