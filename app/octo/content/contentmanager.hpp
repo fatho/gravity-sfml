@@ -48,17 +48,17 @@ public:
    *  \param message a plain text error message
    *  \todo provide predefined error codes/types
    */
-  ContentLoadException(const char* message);
+  explicit ContentLoadException(const char* message);
   /*! \brief Initializes the exception object with a plain text message.
    *
    *  \param message a plain text error message
    */
-  ContentLoadException(const std::string& message);
+  explicit ContentLoadException(const std::string& message);
 };
 
 /*! \brief A content manager provides access to the underlying asset files and caching of loaded assets.
  *
- *  Base classes are required to overload ::openDataStream in order to define
+ *  Base classes are required to overload ContentManager::openDataStream in order to define
  *  a way of turning a virtual content path into an actual stream.
  */
 class ContentManager {

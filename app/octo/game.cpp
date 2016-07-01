@@ -61,9 +61,9 @@ void Game::popState() {
   assert(!m_states.empty());
 
   GameStatePtr state = topState();
+  state->deactivated();
   // unregister old state
   m_states.pop();
-  state->deactivated();
   state->removed();
   state->setGame(nullptr);
   // new top state becomes active
@@ -78,8 +78,8 @@ void Game::changeState(GameStatePtr state) {
   // not implemented in terms of pushState/popState because semantics
   // for game state notifications are different here
   GameStatePtr removed = m_states.top();
-  m_states.pop();
   removed->deactivated();
+  m_states.pop();
   removed->removed();
   removed->setGame(nullptr);
   state->setGame(this);
@@ -89,5 +89,9 @@ void Game::changeState(GameStatePtr state) {
 }
 
 GameStatePtr Game::topState() {
-  return m_states.top();
+  if(m_states.empty()) {
+    return nullptr;
+  } else {
+    return m_states.top();
+  }
 }

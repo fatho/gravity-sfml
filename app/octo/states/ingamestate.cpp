@@ -2,6 +2,7 @@
 
 #include "../game.hpp"
 #include "../game/components.hpp"
+#include "../rendering/debugdraw.hpp"
 
 #include <iostream>
 
@@ -14,9 +15,13 @@ InGameState::InGameState() {
   // TODO: take world as an argument
   m_world = std::make_unique<game::World>();
   m_world->setClipRadius(900);
+  /*
   m_world->addPlanet({300, 200}, 128, 30000);
   m_world->addPlanet({-150, -200}, 128, 30000);
   m_world->spawnDebugBullet({-300,-300}, {100, -100});
+  */
+  m_world->addPlanet({0, 0}, 128, 30000);
+  m_world->spawnDebugBullet({0,-400}, {0, 0});
   // initial view shows everything
   float worldRadius = m_world->clipRadius();
   m_view.reset(sf::FloatRect(-worldRadius, - worldRadius, 2 * worldRadius, 2 * worldRadius));
@@ -76,6 +81,7 @@ void InGameState::drawPlanets(sf::RenderTarget& target, sf::RenderStates states)
 }
 
 void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) const {
+  rendering::DebugDraw debug(target, states, 1);
   m_world->entities().each<Position>([&](entityx::Entity e, Position& pos) {
       auto planet = e.component<Planet>();
       auto body = e.component<DynamicBody>();
@@ -90,7 +96,7 @@ void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) c
       }
       if(body) {
         sf::CircleShape bodyCircle(4);
-        bodyCircle.setFillColor(sf::Color::Yellow);
+        bodyCircle.setFillColor(sf::Color::Red);
         bodyCircle.setPosition(pos.position.x - 4, pos.position.y - 4);
         target.draw(bodyCircle, states);
       }

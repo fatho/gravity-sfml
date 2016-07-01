@@ -1,7 +1,10 @@
-
 find_package(Boost 1.60 REQUIRED filesystem)
 find_package(SFML 2.3 COMPONENTS graphics window audio system)
 find_package(EntityX REQUIRED)
+
+# build sub components
+add_subdirectory(fmtlog)
+add_subdirectory(cpp-physfs)
 
 set(SOURCES
   main.cpp
@@ -18,15 +21,16 @@ set(SOURCES
   octo/game/components/dynamicbody.cpp
   octo/game/components/planet.cpp
   octo/game/components/position.cpp
-  octo/game/systems/attraction.cpp
+  octo/game/systems/attractionsystem.cpp
   octo/game/systems/boundaryenforcer.cpp
   octo/game/systems/physics.cpp
+  octo/rendering/debugdraw.cpp
   octo/states/ingamestate.cpp
   )
 
 add_executable(gravity ${SOURCES})
 target_include_directories(gravity PRIVATE
-  ${PROJECT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/app
   ${SFML_INCLUDE_DIR}
   ${Boost_INCLUDE_DIRS}
   ${ENTITYX_INCLUDE_DIR})

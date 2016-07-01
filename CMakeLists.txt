@@ -10,8 +10,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_CXX_EXTENSIONS off)
 
 # might add assets/tools/etc. here later
-add_subdirectory(fmtlog)
-add_subdirectory(cpp-physfs)
 add_subdirectory(assets)
 # the actual game application
 add_subdirectory(app)

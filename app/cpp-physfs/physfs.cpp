@@ -38,8 +38,11 @@ Mount::Mount(Mount&& other) {
 }
 
 Mount& Mount::operator=(Mount&& other) {
-  std::swap(m_archivePath, other.m_archivePath);
-  std::swap(m_mountPoint, other.m_mountPoint);
+  // clear other
+  Mount tmp(std::move(other));
+  // replace mounted handles
+  std::swap(*this, other);
+  // tmp now makes sure to unmount the archive previously held by this instance
   return *this;
 }
 
@@ -52,7 +55,7 @@ void Mount::mount(boost::filesystem::path archive_path, std::string mount_point,
   m_mountPoint = mount_point;
   PHYSFS_mount(archive_path.c_str(),
                mount_point.c_str(),
-               insertion_point == SearchPathInsertion::append ? 1 : 0);
+               insertion_point == SearchPathInsertion::Append ? 1 : 0);
 }
 
 
@@ -78,6 +81,11 @@ const std::string& Mount::mountPath() const {
 
 Mount::~Mount() {
   unmount();
+}
+
+void swap(Mount& m1, Mount& m2) {
+  std::swap(m1.m_mountPoint, m2.m_mountPoint);
+  std::swap(m1.m_archivePath, m2.m_archivePath);
 }
 
 FileHandle open(const std::string& path, OpenMode mode) {
@@ -176,8 +184,8 @@ bool Device::flush() {
   return PHYSFS_flush(m_handle);
 }
 
-bool exists(const std::string& fname) {
-  return PHYSFS_exists(fname.c_str());
+bool exists(const std::string& path) {
+  return PHYSFS_exists(path.c_str());
 }
 
 InputStream::InputStream(FileHandle handle)

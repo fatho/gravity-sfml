@@ -1,0 +1,29 @@
+/*!
+  \namespace octo
+  \brief Root namespace for everything related to the game.
+*/
+
+/*!
+  \namespace octo::content
+  \brief Contains everything related to game content.
+*/
+
+/*!
+  \namespace octo::game
+  \brief Contains the actual game logic.
+*/
+
+/*!
+  \namespace octo::game::components
+  \brief Contains the components used in the ECS.
+*/
+
+/*!
+  \namespace octo::game::systems
+  \brief Contains the systems used in the ECS.
+*/
+
+/*!
+  \namespace octo::game::states
+  \brief Contains the game states.
+*/

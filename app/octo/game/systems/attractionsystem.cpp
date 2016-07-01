@@ -1,4 +1,4 @@
-#include "attraction.hpp"
+#include "attractionsystem.hpp"
 
 #include "../components/dynamicbody.hpp"
 #include <math/vector.hpp>
@@ -26,9 +26,22 @@ void Attraction::update(EntityManager& es, EventManager&, TimeDelta dt) {
         // compute attraction force towards attractor with quadratic falloff
         sf::Vector2f forceDir = attractorPos->position - attractedPos->position;
         float distanceSq = math::vector::lengthSquared(forceDir);
-        forceDir /= static_cast<float>(sqrt(distanceSq));
-        sf::Vector2f force = forceDir * attractable->forceFactor * attractor->intensity / distanceSq;
-        //std::cout << "attraction: " << force.x << " " << force.y << "\n";
+        float distance = static_cast<float>(sqrt(distanceSq));
+        float radius = attractor->radius;
+        float radiusSq = radius * radius;
+
+        forceDir /= distance;
+        sf::Vector2f force = forceDir * attractable->intensity * attractor->intensity;
+        if(__builtin_expect(distanceSq < radiusSq, 0)) {
+          // when inside the attractor, reduce force towards center based on an approximation
+          // computed from the ratio of the two parts pulling the object further inwards,
+          // and pulling it outwards.
+          float alpha = distance * (3 * radiusSq -  distanceSq) / (2 * radiusSq * radius);
+          force *= alpha / radiusSq;
+          //std::cout << "force: " << math::vector::length(force) << "\n";
+        } else {
+          force /= distanceSq;
+        }
         attractedBody->force += force;
       }
     }

@@ -1,7 +1,7 @@
 #include "world.hpp"
 
 #include "components.hpp"
-#include "systems/attraction.hpp"
+#include "systems/attractionsystem.hpp"
 #include "systems/boundaryenforcer.hpp"
 #include "systems/physics.hpp"
 
@@ -22,8 +22,8 @@ void World::addPlanet(sf::Vector2f position, int radius, float mass) {
   // add immovable planet
   planet.assign<components::Position>(position);
 
-  planet.assign<components::Attractor>(mass * m_gravitationalConstant,
-                                       components::PLANET_ATTRACTION);
+  planet.assign<components::Attractor>(
+      mass * m_gravitationalConstant, components::PLANET_ATTRACTION, radius);
 
   // create circular planet texture
   auto planetComp = planet.assign<components::Planet>();
