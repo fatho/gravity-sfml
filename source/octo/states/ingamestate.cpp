@@ -77,19 +77,18 @@ void InGameState::drawPlanets(sf::RenderTarget& target, sf::RenderStates states)
 }
 
 void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) const {
-  rendering::DebugDraw debug(target, states, 1);
-
-  debug.circle(sf::Vector2f(), m_world->clipRadius()).outline(2, sf::Color::Red).draw();
+  using rendering::DebugDraw;
+  DebugDraw::circle(sf::Vector2f(), m_world->clipRadius()).outline(2, sf::Color::Red).draw(target, states);
 
   m_world->entities().each<Position>([&](entityx::Entity e, Position& pos) {
       auto planet = e.component<Planet>();
       auto body = e.component<DynamicBody>();
       if(planet) {
-        debug.rectangle(math::rect::fromCenterSize(pos.position, planet->sizef()))
-          .outline(2, sf::Color::Blue).draw();
+        DebugDraw::rectangle(math::rect::fromCenterSize(pos.position, planet->size()))
+          .outline(2, sf::Color::Blue).draw(target, states);
       }
       if(body) {
-        debug.circle(pos.position, 4).fill(sf::Color::Red).draw();
+        DebugDraw::circle(pos.position, 4).fill(sf::Color::Red).draw(target, states);
       }
     });
 }
