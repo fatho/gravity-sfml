@@ -71,7 +71,7 @@ void InGameState::drawBackground(sf::RenderTarget& target, sf::RenderStates stat
 void InGameState::drawPlanets(sf::RenderTarget& target, sf::RenderStates states) const {
   m_world->entities().each<Position, Planet>([&](entityx::Entity, Position& pos, Planet& planet) {
     sf::Sprite planetSprite(planet.terrainTexture);
-    planetSprite.setPosition(pos.position - planet.sizef() / 2.f);
+    planetSprite.setPosition(pos.position - planet.size() / 2.f);
     target.draw(planetSprite, states);
   });
 }

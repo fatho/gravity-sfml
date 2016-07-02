@@ -3,11 +3,11 @@
 using namespace octo::game::components;
 
 DynamicBody::DynamicBody()
-  : mass(0), inverseMass(0), affectedByGravity(false)
+  : mass(0), inverseMass(0)
 {
 }
 
-DynamicBody::DynamicBody(float mass, bool affectedByGravity)
-  : mass(mass), inverseMass(1.0f / mass), affectedByGravity(affectedByGravity)
+DynamicBody::DynamicBody(float mass)
+  : mass(mass), inverseMass(mass == 0 ? 0 : 1.0f / mass)
 {
 }
