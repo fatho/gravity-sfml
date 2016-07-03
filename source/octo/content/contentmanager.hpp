@@ -1,9 +1,13 @@
 #pragma once
 
+#include <fmtlog/fmtlog.hpp>
+
 #include <exception>
 #include <memory>
 #include <string>
 #include <typeinfo>
+#include <typeindex>
+#include <unordered_map>
 
 #include <SFML/System/InputStream.hpp>
 
@@ -134,9 +138,12 @@ public:
   std::shared_ptr<void> load(const std::type_info& assetType, const std::string& contentPath, bool useCache);
 
 private:
-  class Impl;
-  /// private implementation details
-  Impl * const m_impl;
+  /// Content manager logger
+  fmtlog::Log log = fmtlog::For<ContentManager>();
+  /// loader registration mapping a loader to an asset type
+  std::unordered_map<std::type_index, std::unique_ptr<ContentLoader>> loaders;
+  /// weak pointer cache for content
+  std::unordered_map<std::string, std::weak_ptr<void>> contentCache;
 };
 }
 }

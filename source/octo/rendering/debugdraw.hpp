@@ -11,6 +11,11 @@ namespace rendering {
 template<class ShapeType>
 class DrawBuilder {
 public:
+  DrawBuilder() {
+    m_shape.setFillColor(sf::Color::Transparent);
+    m_shape.setOutlineColor(sf::Color::Transparent);
+  }
+
   /*! \brief The shape constructed by this instance.
    *  \returns the shape under construction.
    */

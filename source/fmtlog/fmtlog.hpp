@@ -7,29 +7,6 @@
 #include <boost/type_index.hpp>
 #include <string>
 
-/*! \brief Emits a log message on the logger \p lg with severity \p sev.
- *
- *  The log message and formatting arguments are specified in the varargs
- *  part of the macro. At least the formatting string must always be specified.
- *  It is only part of the varargs, because forwarding empty varargs to a C++ function
- *  leads to problems some compilers.
- *
- *  \param lg the logger to send the message to.
- *  \param sev the severity of the message.
- */
-#define LOG_GENERAL(lg, sev, ...)                                                                  \
-  static_cast<::fmtlog::Log>(lg).message(sev, __FILE__, __LINE__, __VA_ARGS__)
-/// Emits a debug message using \ref LOG_GENERAL.
-#define LOG_DEBUG(lg, ...) LOG_GENERAL(lg, ::fmtlog::Severity::Debug, __VA_ARGS__)
-/// Emits an info message using \ref LOG_GENERAL.
-#define LOG_INFO(lg, ...) LOG_GENERAL(lg, ::fmtlog::Severity::Info, __VA_ARGS__)
-/// Emits a warning message using \ref LOG_GENERAL.
-#define LOG_WARN(lg, ...) LOG_GENERAL(lg, ::fmtlog::Severity::Warning, __VA_ARGS__)
-/// Emits a error message using \ref LOG_GENERAL.
-#define LOG_ERROR(lg, ...) LOG_GENERAL(lg, ::fmtlog::Severity::Error, __VA_ARGS__)
-/// Emits a fatal error message using \ref LOG_GENERAL.
-#define LOG_FATAL(lg, ...) LOG_GENERAL(lg, ::fmtlog::Severity::Fatal, __VA_ARGS__)
-
 /*! \brief Namespace containing the logging functions.
  */
 namespace fmtlog {
@@ -66,44 +43,155 @@ enum class Severity {
   Fatal
 };
 
+/*! \brief Implements internal helper function used by the logging facilites.
+ *
+ *  Not intended for use outside of fmtlog.
+ */
+namespace internal {
+
+/*! \brief Passes values to boost::format from a variadic template.
+ *
+ *  \param fmt a reference to the format object
+ *  \param args the format arguments
+ */
+template<typename... Args>
+inline void formatWithArgs(boost::format& fmt, Args&&... args);
+
+/*! \brief Specialization for when there are no arguments.
+ *
+ *  This function does nothing.
+ *  \see void formatWithArgs(boost::format& fmt, Args&&... args)
+ */
+template<>
+inline void formatWithArgs(boost::format&) {}
+
+/*! \brief Specialization for when there is at least one argument.
+ *
+ *  \param fmt the format object
+ *  \param first the first format argument
+ *  \param args the remaining format arguments
+ */
+template<typename First, typename... Args>
+inline void formatWithArgs(boost::format& fmt, First&& first, Args&&... args) {
+  fmt % std::forward<First>(first);
+  formatWithArgs(fmt, std::forward<Args>(args)...);
+}
+}
+
+/*! \brief Helper class for getting the name of a class.
+ *
+ *  It is used in a constructor of Log to set the name of the log scope to
+ *  the name of type \c C.
+ */
+template<class C>
+struct For {
+  /*! \brief Returns the name of the class \c C.
+   *  \returns the pretty name (according to Boost) of class \c C.
+   */
+  std::string operator()() {
+    return boost::typeindex::type_id<C>().pretty_name();
+  }
+};
+
 /*! \brief A scoped log target.
+ *
+ *  \todo Provide global Log configuration like severity filters.
+ *  \todo Implement log file instead of using stderr.
  */
 class Log {
 public:
-  /// Initializes the log scope with the name of a type.
+  /// Initializes the log scope with the name of type \c T.
   template <typename T>
-  Log() : Log(boost::typeindex::type_id<T>().pretty_name()) {}
+  Log() : Log(For<T>()) {}
+
+  /// Initializes the log scope with the name of type \c C.
+  template<class C>
+  Log(For<C> f) : Log(f()) {}
 
   /*! Initializes the log scope with a user defined name.
    * \param scope the scope's name
    */
-  Log(std::string scope);
+  Log(const std::string& scope);
+
+  /*! Initializes the log scope with a user defined name.
+   * \param scope the scope's name
+   */
+  Log(const char* scope);
 
   /*! \brief Emits a log message.
    *
    *  \param sev the severity of the message
-   *  \param filename the name of the source file containing the log invocation
-   *  \param line the line number of the log invocation
    *  \param msg the log message.
    */
-  void message(Severity sev, const char* filename, int line, const std::string& msg);
+  void message(Severity sev, const std::string& msg);
 
   /*! \brief Emits a formatted log message.
    *
    *  The formatting relies on the Boost format library.
    *  \param sev the severity of the message
-   *  \param filename the name of the source file containing the log invocation
-   *  \param line the line number of the log invocation
    *  \param fmt the format string for producing the log message.
    *  \param args formatting arguments.
    */
   template <typename... Args>
-  void message(Severity sev, const char* filename, int line, const std::string& fmt,
-               Args&&... args) {
+  void message(Severity sev, const std::string& fmt, Args&&... args) {
     boost::format f(fmt);
-    using unroll = int[];
-    static_cast<void>(unroll{0, (f % std::forward<Args>(args), 0)...});
-    message(sev, filename, line, boost::str(f));
+    internal::formatWithArgs(f, std::forward<Args>(args)...);
+    message(sev, boost::str(f));
+  }
+
+  /*! \brief Emits a debug log message.
+   *
+   *  \param fmt the format string for producing the log message.
+   *  \param args formatting arguments.
+   *  \see Log::message
+   */
+  template<typename... Args>
+  void debug(const std::string& fmt, Args&&... args) {
+    message(Severity::Debug, fmt, std::forward<Args>(args)...);
+  }
+
+  /*! \brief Emits an info log message.
+   *
+   *  \param fmt the format string for producing the log message.
+   *  \param args formatting arguments.
+   *  \see Log::message
+   */
+  template<typename... Args>
+  void info(const std::string& fmt, Args&&... args) {
+    message(Severity::Info, fmt, std::forward<Args>(args)...);
+  }
+
+  /*! \brief Emits a warning log message.
+   *
+   *  \param fmt the format string for producing the log message.
+   *  \param args formatting arguments.
+   *  \see Log::message
+   */
+  template<typename... Args>
+  void warning(const std::string& fmt, Args&&... args) {
+    message(Severity::Warning, fmt, std::forward<Args>(args)...);
+  }
+
+  /*! \brief Emits an error log message.
+   *
+   *  \param fmt the format string for producing the log message.
+   *  \param args formatting arguments.
+   *  \see Log::message
+   */
+  template<typename... Args>
+  void error(const std::string& fmt, Args&&... args) {
+    message(Severity::Error, fmt, std::forward<Args>(args)...);
+  }
+
+  /*! \brief Emits a fatal log message.
+   *
+   *  \param fmt the format string for producing the log message.
+   *  \param args formatting arguments.
+   *  \see Log::message
+   */
+  template<typename... Args>
+  void fatal(const std::string& fmt, Args&&... args) {
+    message(Severity::Fatal, fmt, std::forward<Args>(args)...);
   }
 
 private:

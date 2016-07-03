@@ -11,7 +11,7 @@ DrawBuilder<sf::CircleShape> DebugDraw::circle(const sf::Vector2f& center, float
 
 DrawBuilder<sf::RectangleShape> DebugDraw::rectangle(const sf::FloatRect& rect) {
   DrawBuilder<sf::RectangleShape> builder;
-  builder.shape().setPosition(rect.top, rect.left);
+  builder.shape().setPosition(rect.left, rect.top);
   builder.shape().setSize(sf::Vector2f(rect.width, rect.height));
   return builder;
 }

@@ -1,12 +1,11 @@
 #pragma once
 
 #include "gamestate.hpp"
-
 #include "content/filecontentmanager.hpp"
+#include <fmtlog/fmtlog.hpp>
 
 #include <memory>
 #include <stack>
-
 #include <SFML/Graphics.hpp>
 
 namespace octo {
@@ -143,6 +142,8 @@ public:
   }
 
 private:
+  /// Game scope logger
+  fmtlog::Log log = fmtlog::For<Game>();
   /// the SFML window used for rendering the game
   sf::RenderWindow m_window;
   /// the game state stack

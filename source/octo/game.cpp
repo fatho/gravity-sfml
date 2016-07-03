@@ -13,17 +13,24 @@ Game::Game() {
   // TODO: load settings
 
   // setup subsystems
+  log.info("initializing content manager");
   m_content.setBasePath(boost::filesystem::current_path() / "assets");
   content::sfml::registerSFMLLoaders(m_content);
 
   // setup graphics
+  log.info("creating window");
   m_window.create(sf::VideoMode(800, 600), "Gravity");
   m_window.setVerticalSyncEnabled(true);
 
+  // setup state
+  log.info("creating initial state");
   pushNewState<states::InGameState>();
+
+  log.info("initialization complete");
 }
 
 void Game::run() {
+  log.info("starting game loop");
   sf::Clock clock;
   // FIXME: this loop relies on being capped by VSync
   while (m_window.isOpen() && !m_states.empty()) {
@@ -41,6 +48,7 @@ void Game::run() {
     m_window.draw(*topState);
     m_window.display();
   }
+  log.info("game loop finished");
 }
 
 
