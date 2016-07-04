@@ -24,7 +24,7 @@ void Attraction::update(EntityManager& es, EventManager&, TimeDelta dt) {
       (void)e2;
       if((attractable->attractionMask & attractor->attractionMask) != 0) {
         // compute attraction force towards attractor with quadratic falloff
-        sf::Vector2f forceDir = attractorPos->position - attractedPos->position;
+        sf::Vector2f forceDir = attractorPos->current().position - attractedPos->current().position;
         float distanceSq = math::vector::lengthSquared(forceDir);
         float distance = static_cast<float>(sqrt(distanceSq));
         float radius = attractor->radius;

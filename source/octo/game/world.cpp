@@ -23,7 +23,7 @@ void World::addPlanet(sf::Vector2f position, int radius, float mass) {
   planet.assign<components::Spatial>(position);
 
   planet.assign<components::Attractor>(
-    mass * m_gravitationalConstant, components::Attractor::PlanetBit, radius);
+      mass * m_gravitationalConstant, components::Attractor::PlanetBit, radius);
 
   // create circular planet texture
   auto planetComp = planet.assign<components::Planet>();
@@ -46,10 +46,19 @@ void World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity) {
   bullet.assign<components::Spatial>(position);
   auto body = bullet.assign<components::DynamicBody>();
   body->setMass(1);
+  body->setInertia(1);
   body->setVelocity(velocity);
   bullet.assign<components::Attractable>(1, components::Attractable::PlanetBit);
 }
 
-void World::update(sf::Time elapsed) {
-  systems().update_all(elapsed.asSeconds());
+void World::update(float timeStep) {
+  systems().update_all(timeStep);
+}
+
+void World::interpolateState(float alpha) {
+  using namespace components;
+
+  m_es.entities.each<Spatial>([alpha](entityx::Entity, Spatial& spatial) {
+    spatial.interpolate(alpha);
+  });
 }

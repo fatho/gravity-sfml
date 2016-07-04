@@ -19,18 +19,35 @@ InGameState::InGameState() {
 
   m_world->addPlanet({300, 200}, 128, 30000);
   m_world->addPlanet({-150, -200}, 128, 30000);
-  m_world->spawnDebugBullet({-300,-300}, {100, -100});
+  m_world->spawnDebugBullet({-300, -300}, {100, -100});
 
   // m_world->addPlanet({0, 0}, 128, 30000);
   // m_world->spawnDebugBullet({0,-400}, {0, 0});
 
   // initial view shows everything
   float worldRadius = m_world->clipRadius();
-  m_view.reset(sf::FloatRect(-worldRadius, - worldRadius, 2 * worldRadius, 2 * worldRadius));
+  m_view.reset(sf::FloatRect(-worldRadius, -worldRadius, 2 * worldRadius, 2 * worldRadius));
 }
 
 void InGameState::update(sf::Time elapsed) {
-  m_world->update(elapsed);
+  // fill time accumulator
+  double elapsedSeconds = elapsed.asSeconds();
+  if (elapsedSeconds > 0.125) {
+    // cap frame rate at 8 FPS to prevent spiral of death.
+    // note that this will cause the simulation to run slower
+    elapsedSeconds = 0.125f;
+  }
+  m_timeAccumulator += elapsedSeconds;
+
+  // perform fixed time steps on accumulated time
+  while (m_timeAccumulator >= m_physicsStep) {
+    m_world->update(m_physicsStep);
+    m_timeAccumulator -= m_physicsStep;
+  }
+
+  // interpolation
+  const double alpha = m_timeAccumulator / m_physicsStep;
+  m_world->interpolateState(alpha);
 }
 
 void InGameState::handleEvents() {
@@ -70,29 +87,38 @@ void InGameState::drawBackground(sf::RenderTarget& target, sf::RenderStates stat
 
 void InGameState::drawPlanets(sf::RenderTarget& target, sf::RenderStates states) const {
   m_world->entities().each<Spatial, Planet>([&](entityx::Entity, Spatial& spatial, Planet& planet) {
+    const SpatialSnapshot& interpolated = spatial.interpolated();
     sf::Sprite planetSprite(planet.terrainTexture);
     planetSprite.setOrigin(planet.size() * 0.5f);
-    planetSprite.setPosition(spatial.position);
-    planetSprite.setRotation(spatial.rotationDegrees);
+    planetSprite.setPosition(interpolated.position);
+    planetSprite.setRotation(interpolated.rotationDegrees);
     target.draw(planetSprite, states);
   });
 }
 
 void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) const {
   using rendering::DebugDraw;
-  DebugDraw::circle(sf::Vector2f(), m_world->clipRadius()).outline(2, sf::Color::Red).draw(target, states);
+  DebugDraw::circle(sf::Vector2f(), m_world->clipRadius())
+      .outline(2, sf::Color::Red)
+      .draw(target, states);
 
   m_world->entities().each<Spatial>([&](entityx::Entity e, Spatial& spatial) {
-      auto planet = e.component<Planet>();
-      auto body = e.component<DynamicBody>();
-      if(planet) {
-        DebugDraw::rectangle(math::rect::fromCenterSize(spatial.position, planet->size()))
-          .outline(2, sf::Color::Blue).draw(target, states);
-      }
-      if(body) {
-        DebugDraw::circle(spatial.position, 16).outline(2, sf::Color::Red).draw(target, states);
-      }
-    });
+    const SpatialSnapshot& interpolated = spatial.interpolated();
+    auto planet = e.component<Planet>();
+    auto body = e.component<DynamicBody>();
+    if (planet) {
+      DebugDraw::rectangle(
+          math::rect::fromCenterSize(spatial.interpolated().position, planet->size()))
+          .outline(2, sf::Color::Blue)
+          .draw(target, states);
+    }
+    if (body) {
+      DebugDraw::circle(interpolated.position, 16).outline(2, sf::Color::Red).draw(target, states);
+      DebugDraw::rectangle(interpolated.position, {2, 16}, {4, 16}, interpolated.rotationDegrees)
+          .fill(sf::Color::Red)
+          .draw(target, states);
+    }
+  });
 }
 
 void InGameState::rebuildView() {

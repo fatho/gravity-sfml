@@ -17,11 +17,17 @@ float BoundaryEnforcer::boundaryRadius() const {
 void BoundaryEnforcer::update(entityx::EntityManager& es, entityx::EventManager&,
                               entityx::TimeDelta) {
   es.each<components::Spatial>([&](entityx::Entity entity, components::Spatial& spatial) {
-      // kill every entity that is out of bounds or has invalid coordinates
-      if (!std::isfinite(spatial.position.x) || !std::isfinite(spatial.position.y) ||
-          math::vector::lengthSquared(spatial.position) > m_boundary * m_boundary) {
-        entity.destroy();
-        // TODO: spawn fancy destruction effect
-      }
-    });
+    const components::SpatialSnapshot& current = spatial.current();
+    if (!std::isfinite(current.position.x) || !std::isfinite(current.position.y)) {
+      // invalid coordinates indicate a programming error
+      log.error("entity %d has non-finite coordinates {%f, %f}",
+                entity.id().id(),
+                current.position.x,
+                current.position.y);
+    } else if (math::vector::lengthSquared(current.position) > m_boundary * m_boundary) {
+      // entity is out of bounds
+      entity.destroy();
+      // TODO: spawn fancy destruction effect
+    }
+  });
 }

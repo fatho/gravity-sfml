@@ -8,7 +8,7 @@ namespace rendering {
 
 /*! \brief Provides an interface for constructing SFML shapes that allows chaining.
  */
-template<class ShapeType>
+template <class ShapeType>
 class DrawBuilder {
 public:
   DrawBuilder() {
@@ -33,7 +33,8 @@ public:
   }
 
   /*! \brief Updates the shape's outline.
-   *  \param thickness the oulines thickness, will be multiplied with the thickness factor of this builder.
+   *  \param thickness the oulines thickness, will be multiplied with the thickness factor of this
+   * builder.
    *  \param color the new outline color.
    *  \returns a reference to this instance for chaining.
    */
@@ -76,7 +77,17 @@ public:
    *  \return a DrawBuilder for setting the visual properties of the sf::RectangleShape.
    */
   static DrawBuilder<sf::RectangleShape> rectangle(const sf::FloatRect& rect);
-};
 
+  /*! \brief Starts constructing a rectangle.
+   *  \param position the position of the rectangles origin in world coordinates.
+   *  \param origin the origin of the rectangle in local coordinates.
+   *  \param size the size of the rectangle.
+   *  \param rotation the rotation of the rectangle around the origin, clockwise in degrees.
+   *  \return a DrawBuilder for setting the visual properties of the sf::RectangleShape.
+   */
+  static DrawBuilder<sf::RectangleShape> rectangle(const sf::Vector2f& position,
+                                                   const sf::Vector2f& origin,
+                                                   const sf::Vector2f& size, float rotation);
+};
 }
 }

@@ -19,7 +19,7 @@ public:
 
   void spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity);
 
-  void update(sf::Time elapsed);
+  void update(float timeStep);
 
   // accessors
 
@@ -52,6 +52,16 @@ public:
     m_clipRadius = radius;
     m_boundaryEnforcer->setBoundaryRadius(radius);
   }
+
+  /*! \brief Interpolates the world state between the current and last update.
+   *
+   *  The following entity types are affected:
+   *    - the interpolated position of dynamic bodies is stored in
+   *      their \ref components::Spatial "Spatial" component.
+   *
+   *  \param alpha the interpolation function
+   */
+  void interpolateState(float alpha);
 
 private:
   entityx::EntityX m_es;

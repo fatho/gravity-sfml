@@ -2,6 +2,8 @@
 
 #include "../components/spatial.hpp"
 
+#include <fmtlog/fmtlog.hpp>
+
 #include <entityx/entityx.h>
 
 namespace octo {
@@ -37,6 +39,7 @@ struct BoundaryEnforcer : public entityx::System<BoundaryEnforcer> {
   void update(entityx::EntityManager& es, entityx::EventManager& events, entityx::TimeDelta dt) override;
 
 private:
+  fmtlog::Log log = fmtlog::For<BoundaryEnforcer>();
   /// The boundary radius.
   float m_boundary;
 };
