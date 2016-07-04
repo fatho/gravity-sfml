@@ -100,10 +100,6 @@ struct For {
  */
 class Log {
 public:
-  /// Initializes the log scope with the name of type \c T.
-  template <typename T>
-  Log() : Log(For<T>()) {}
-
   /// Initializes the log scope with the name of type \c C.
   template<class C>
   Log(For<C> f) : Log(f()) {}
