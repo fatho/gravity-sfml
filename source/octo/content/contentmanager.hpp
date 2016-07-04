@@ -5,10 +5,8 @@
 #include <exception>
 #include <memory>
 #include <string>
-#include <typeinfo>
-#include <typeindex>
-#include <unordered_map>
-
+#include <boost/type_index.hpp>
+#include <boost/unordered_map.hpp>
 #include <SFML/System/InputStream.hpp>
 
 namespace octo {
@@ -121,7 +119,7 @@ public:
    *  \param assetType the runtime representation of the asset type.
    *  \param loader the new loader used for assets of type \p assetType. May be null to unregister.
    */
-  void registerLoader(const std::type_info& assetType, std::unique_ptr<ContentLoader> loader);
+  void registerLoader(const boost::typeindex::type_index& assetType, std::unique_ptr<ContentLoader> loader);
 
   /*! \brief Loads a content file of a given asset type.
    *
@@ -135,15 +133,16 @@ public:
    *  of the type represented by \p assetType.
    *  \exception ContentLoadException if loading the content failed for any reason.
    */
-  std::shared_ptr<void> load(const std::type_info& assetType, const std::string& contentPath, bool useCache);
+  std::shared_ptr<void> load(const boost::typeindex::type_index& assetType,
+                             const std::string& contentPath, bool useCache);
 
 private:
   /// Content manager logger
   fmtlog::Log log = fmtlog::For<ContentManager>();
   /// loader registration mapping a loader to an asset type
-  std::unordered_map<std::type_index, std::unique_ptr<ContentLoader>> loaders;
+  boost::unordered_map<boost::typeindex::type_index, std::unique_ptr<ContentLoader>> loaders;
   /// weak pointer cache for content
-  std::unordered_map<std::string, std::weak_ptr<void>> contentCache;
+  boost::unordered_map<std::string, std::weak_ptr<void>> contentCache;
 };
 }
 }
