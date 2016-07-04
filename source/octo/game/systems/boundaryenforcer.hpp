@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../components/position.hpp"
+#include "../components/spatial.hpp"
 
 #include <entityx/entityx.h>
 
@@ -25,7 +25,7 @@ struct BoundaryEnforcer : public entityx::System<BoundaryEnforcer> {
 
   /*! \brief Destroys all entities outside of the boundary.
    *
-   *  This affects all entities with a \ref components::Position component.
+   *  This affects all entities with a \ref components::Spatial component.
    *
    *  \param es the entity system involved,
    *  \param events (currently) unused,

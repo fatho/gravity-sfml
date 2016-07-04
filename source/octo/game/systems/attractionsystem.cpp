@@ -12,7 +12,7 @@ using namespace entityx;
 void Attraction::update(EntityManager& es, EventManager&, TimeDelta dt) {
   using namespace octo::game::components;
   // component iterators
-  ComponentHandle<Position> attractedPos, attractorPos;
+  ComponentHandle<Spatial> attractedPos, attractorPos;
   ComponentHandle<Attractor> attractor;
   ComponentHandle<Attractable> attractable;
   ComponentHandle<DynamicBody> attractedBody;

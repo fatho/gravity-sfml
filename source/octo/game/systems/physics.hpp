@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../components/position.hpp"
+#include "../components/spatial.hpp"
 #include "../components/dynamicbody.hpp"
 
 #include <entityx/entityx.h>
@@ -16,7 +16,7 @@ namespace systems {
 struct Physics : public entityx::System<Physics> {
   /*! \brief Destroys all entities outside of the boundary.
    *
-   *  This affects all entities with a \ref components::Position "Position" and \ref components::DynamicBody "DynamicBody" component.
+   *  This affects all entities with a \ref components::Spatial "Spatial" and \ref components::DynamicBody "DynamicBody" component.
    *  After computing the effect of a force, the corresponding data member of the \c DynamicBody component is reset to zero.
    *  It is expected that forces are recalculated every frame.
    *

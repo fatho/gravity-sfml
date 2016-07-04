@@ -69,10 +69,11 @@ void InGameState::drawBackground(sf::RenderTarget& target, sf::RenderStates stat
 }
 
 void InGameState::drawPlanets(sf::RenderTarget& target, sf::RenderStates states) const {
-  m_world->entities().each<Position, Planet>([&](entityx::Entity, Position& pos, Planet& planet) {
+  m_world->entities().each<Spatial, Planet>([&](entityx::Entity, Spatial& spatial, Planet& planet) {
     sf::Sprite planetSprite(planet.terrainTexture);
     planetSprite.setOrigin(planet.size() * 0.5f);
-    planetSprite.setPosition(pos.position);
+    planetSprite.setPosition(spatial.position);
+    planetSprite.setRotation(spatial.rotationDegrees);
     target.draw(planetSprite, states);
   });
 }
@@ -81,15 +82,15 @@ void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) c
   using rendering::DebugDraw;
   DebugDraw::circle(sf::Vector2f(), m_world->clipRadius()).outline(2, sf::Color::Red).draw(target, states);
 
-  m_world->entities().each<Position>([&](entityx::Entity e, Position& pos) {
+  m_world->entities().each<Spatial>([&](entityx::Entity e, Spatial& spatial) {
       auto planet = e.component<Planet>();
       auto body = e.component<DynamicBody>();
       if(planet) {
-        DebugDraw::rectangle(math::rect::fromCenterSize(pos.position, planet->size()))
+        DebugDraw::rectangle(math::rect::fromCenterSize(spatial.position, planet->size()))
           .outline(2, sf::Color::Blue).draw(target, states);
       }
       if(body) {
-        DebugDraw::circle(pos.position, 4).fill(sf::Color::Red).draw(target, states);
+        DebugDraw::circle(spatial.position, 4).fill(sf::Color::Red).draw(target, states);
       }
     });
 }

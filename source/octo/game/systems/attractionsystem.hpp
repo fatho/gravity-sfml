@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../components/position.hpp"
+#include "../components/spatial.hpp"
 #include "../components/attraction.hpp"
 
 #include <entityx/entityx.h>
@@ -44,7 +44,7 @@ namespace systems {
 struct Attraction : public entityx::System<Attraction> {
   /*! \brief Calculates and adds the attractive forces.
    *
-   *  Only entities having a \ref components::Position component are considered.
+   *  Only entities having a \ref components::Spatial component are considered.
    *  Furthermore, \ref components::Attractable "Attractables" must also be \ref components::DynamicBody "DynamicBodies"
    *  in order to be affected by forces.
    *

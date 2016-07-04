@@ -20,7 +20,7 @@ void World::addPlanet(sf::Vector2f position, int radius, float mass) {
   entityx::Entity planet = entities().create();
 
   // add immovable planet
-  planet.assign<components::Position>(position);
+  planet.assign<components::Spatial>(position);
 
   planet.assign<components::Attractor>(
     mass * m_gravitationalConstant, components::Attractor::PlanetBit, radius);
@@ -43,7 +43,7 @@ void World::addPlanet(sf::Vector2f position, int radius, float mass) {
 void World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity) {
   entityx::Entity bullet = entities().create();
 
-  bullet.assign<components::Position>(position);
+  bullet.assign<components::Spatial>(position);
   auto body = bullet.assign<components::DynamicBody>();
   body->setMass(1);
   body->setVelocity(velocity);

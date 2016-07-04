@@ -18,7 +18,7 @@ set(SOURCES
   game/components/attraction.cpp
   game/components/dynamicbody.cpp
   game/components/planet.cpp
-  game/components/position.cpp
+  game/components/spatial.cpp
   game/systems/attractionsystem.cpp
   game/systems/boundaryenforcer.cpp
   game/systems/physics.cpp
