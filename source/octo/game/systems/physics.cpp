@@ -6,10 +6,19 @@ void Physics::update(entityx::EntityManager& es, entityx::EventManager&, entityx
   using namespace octo::game::components;
   float dtf = static_cast<float>(dt);
   es.each<Spatial, DynamicBody>([dtf](entityx::Entity, Spatial& spatial, DynamicBody& body) {
-      // semi-implicit euler
-      body.momentum += body.force * dtf;
+      // using semi-implicit euler
+
+      // integrate linear motion
+      body.linearMomentum += body.force * dtf;
       spatial.position += body.velocity() * dtf;
+
+      // integrate angular motion
+      body.angularMomentum += body.torque * dtf;
+      spatial.rotationRadians() += body.angularVelocity() * dtf;
+
+      // reset accumulators
       body.force = sf::Vector2f();
+      body.torque = 0;
     });
   // TODO: collision detection & response
 }

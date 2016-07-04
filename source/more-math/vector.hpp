@@ -22,6 +22,11 @@ inline T length(const sf::Vector2<T>& vec) {
   return static_cast<T>(sqrt(lengthSquared(vec)));
 }
 
+template<typename T>
+inline sf::Vector2<T> normalized(const sf::Vector2<T>& vec) {
+  return vec / length(vec);
+}
+
 }
 }
 }

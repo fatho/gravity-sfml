@@ -90,7 +90,7 @@ void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) c
           .outline(2, sf::Color::Blue).draw(target, states);
       }
       if(body) {
-        DebugDraw::circle(spatial.position, 4).fill(sf::Color::Red).draw(target, states);
+        DebugDraw::circle(spatial.position, 16).outline(2, sf::Color::Red).draw(target, states);
       }
     });
 }
