@@ -42,7 +42,7 @@ void Attraction::update(EntityManager& es, EventManager&, TimeDelta dt) {
         } else {
           force /= distanceSq;
         }
-        attractedBody->force += force;
+        attractedBody->b2body->ApplyForceToCenter({force.x, force.y}, true);
       }
     }
   }

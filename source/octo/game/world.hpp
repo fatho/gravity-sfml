@@ -1,6 +1,7 @@
 #pragma once
 
 #include "systems/boundaryenforcer.hpp"
+#include "systems/physics.hpp"
 
 #include <entityx/entityx.h>
 #include <SFML/System/Time.hpp>
@@ -63,10 +64,20 @@ public:
    */
   void interpolateState(float alpha);
 
+
+  /*! \brief Safely destructs the world.
+   *
+   *  The destructor deletes all entities before proceeding with automatic destruction.
+   *  This prevents double destruction of bodies that are owned by components::DynamicBody,
+   *  since entities are apparently destructed after systems.
+   *
+   */
+  ~World();
 private:
   entityx::EntityX m_es;
   float m_clipRadius;
   std::shared_ptr<systems::BoundaryEnforcer> m_boundaryEnforcer;
+  std::shared_ptr<systems::Physics> m_physics;
   float m_gravitationalConstant;
 };
 
