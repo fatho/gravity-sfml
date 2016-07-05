@@ -4,6 +4,7 @@ project(gravity-bin)
 find_package(Boost 1.60 REQUIRED filesystem)
 find_package(SFML 2.3 COMPONENTS graphics window audio system)
 find_package(EntityX REQUIRED)
+find_package(Box2D REQUIRED)
 
 # use root source folder as include path
 include_directories(${PROJECT_SOURCE_DIR})
@@ -19,7 +20,11 @@ target_include_directories(gravity PRIVATE
   ${PROJECT_SOURCE_DIR}
   ${SFML_INCLUDE_DIR}
   ${Boost_INCLUDE_DIRS}
-  ${ENTITYX_INCLUDE_DIR})
+  ${ENTITYX_INCLUDE_DIR}
+  ${BOX2D_INCLUDE_DIRS}
+  )
+
+
 target_link_libraries(gravity
   # integrated libraries
   octo
@@ -29,4 +34,6 @@ target_link_libraries(gravity
   # third party libraries
   ${SFML_LIBRARIES}
   ${Boost_LIBRARIES}
-  ${ENTITYX_LIBRARY})
+  ${ENTITYX_LIBRARY}
+  ${BOX2D_LIBRARIES}
+  )
