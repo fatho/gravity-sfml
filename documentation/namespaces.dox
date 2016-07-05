@@ -27,3 +27,8 @@
   \namespace octo::game::states
   \brief Contains the game states.
 */
+
+/*!
+  \namespace octo::util
+  \brief Contains utility classes/functions that do not fit elsewhere.
+*/

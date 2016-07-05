@@ -1,5 +1,7 @@
 #pragma once
 
+#include <octo/util/interpolation.hpp>
+
 #include <cmath>
 #include <boost/math/constants/constants.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -36,51 +38,6 @@ private:
   }
 
   T& m_degrees;
-};
-
-template<typename T>
-class Interpolated {
-public:
-  Interpolated() {}
-  Interpolated(const T& value) {
-    setAll(value);
-  }
-
-  T& current() {
-    return m_current;
-  }
-
-  const T& current() const {
-    return m_current;
-  }
-
-  T& previous() {
-    return m_previous;
-  }
-
-  const T& previous() const {
-    return m_previous;
-  }
-
-  T& interpolated() {
-    return m_interpolated;
-  }
-
-  const T& interpolated() const {
-    return m_interpolated;
-  }
-
-  void interpolate(float alpha) {
-    m_interpolated = m_previous * (1 - alpha) + m_current * alpha;
-  }
-
-  void setAll(const T& value) {
-    m_current = m_previous = m_interpolated = value;
-  }
-private:
-  T m_previous;
-  T m_current;
-  T m_interpolated;
 };
 
 }
@@ -137,7 +94,7 @@ public:
   void setRotationRadians(float radCCW);
 };
 
-struct Spatial : public internal::Interpolated<SpatialSnapshot> {
+struct Spatial : public util::Interpolated<SpatialSnapshot> {
   Spatial(sf::Vector2f pos = sf::Vector2f(), float rotation = 0);
 };
 
