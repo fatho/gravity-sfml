@@ -12,30 +12,50 @@ namespace components {
 
 namespace internal {
 
+
+/*! \brief View class transparently exposing an underlying angle in degrees as radians.
+ */
 template<typename T>
 class RadView {
 public:
+  /*! \brief Initializes the view.
+   *  \param degress a reference to the underlying variable holding the angle in degrees.
+   */
   RadView(T& degrees)
     : m_degrees(degrees) {}
 
+  /*! \brief Assigns an angle in radians.
+   *
+   *  Internally, it converts the angle to degrees and assigns it to the encapsulated reference.
+
+   *  \param radians the angle in radians.
+   *  \returns a reference to this view.
+   */
   RadView& operator=(float radians) {
-    m_degrees = ccwRadToCwDeg(radians);
+    m_degrees = radians * RadToDeg;
     return *this;
   }
 
+  /*! \brief Adds an angle in radians.
+   *
+   *  Internally, the angle is converted to degrees before being added to the encapsulated reference.
+   *  \param radians the angle that is added.
+   *  \returns a reference to this view.
+   */
   RadView& operator+=(float radians) {
-    m_degrees += ccwRadToCwDeg(radians);
+    m_degrees += radians * RadToDeg;
     return *this;
   }
 
+  /*! \brief Converts the value of the underlying reference to radians.
+   *  \returns the referenced angle in radians.
+   */
   operator float() const {
-    return - m_degrees / static_cast<T>(180.0) * boost::math::constants::pi<T>();
+    return m_degrees / RadToDeg;
   }
 
 private:
-  float ccwRadToCwDeg(float ccwrad) {
-    return - ccwrad * static_cast<T>(180.0) / boost::math::constants::pi<T>();
-  }
+  static constexpr float RadToDeg = 180.f / boost::math::constants::pi<float>();
 
   T& m_degrees;
 };
@@ -64,34 +84,18 @@ public:
   SpatialSnapshot(sf::Vector2f pos = sf::Vector2f(), float rotation = 0);
 
 
-  /*! \brief Returns the entity's rotation in radians in counter-clockwise order.
+  /*! \brief Returns the entity's rotation in radians in clockwise order.
    *
-   *  Note that the angles direction is reversed compared to the \ref rotationDegrees member.
-   *  This function returns an angle that can directly be used in trigonometric functions,
-   *  expecting counter-clockwise radians.
-   *
-   *  \return The entity's rotation in radians in counter-clockwise order.
+   *  \return The entity's rotation in radians in clockwise order.
    */
   float rotationRadians() const;
 
-  /*! \brief Returns a modifiable view presenting the entity's rotation in radians in counter-clockwise order.
+  /*! \brief Returns a modifiable view presenting the entity's rotation in radians in clockwise order.
    *
-   *  Note that the angles direction is reversed compared to the \ref rotationDegrees member.
-   *  This function returns an angle that can directly be used in trigonometric functions,
-   *  expecting counter-clockwise radians.
-   *
-   *  \return The a view of the entity's rotation in radians in counter-clockwise order.
+   *  \return The a view of the entity's rotation in radians in clockwise order.
    *  \warning The returned reference is only valid as long a this instance is still alive.
    */
   internal::RadView<float> rotationRadians();
-
-  /*! \brief Sets the entity's rotation from counter-clockwise angle in radians.
-   *
-   *  It is internally converted to degrees in clockwise order and stored
-   *  in the \ref rotationDegrees member.
-   *  \param radCCW the new rotation angle in radians in counter-clockwise order.
-   */
-  void setRotationRadians(float radCCW);
 };
 
 struct Spatial : public util::Interpolated<SpatialSnapshot> {

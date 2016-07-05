@@ -15,13 +15,9 @@ internal::RadView<float> SpatialSnapshot::rotationRadians() {
   return internal::RadView<float>(rotationDegrees);
 }
 
-void SpatialSnapshot::setRotationRadians(float radCCW) {
-  rotationDegrees = - radCCW * 180.f / boost::math::constants::pi<float>();
-}
-
 Spatial::Spatial(sf::Vector2f pos, float rotation)
   : Interpolated<SpatialSnapshot>(SpatialSnapshot(pos, rotation))
-{ 
+{
 }
 
 SpatialSnapshot operator*(const SpatialSnapshot& spatial, float alpha) {

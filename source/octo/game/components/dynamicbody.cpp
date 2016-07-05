@@ -37,7 +37,7 @@ void DynamicBody::setInertia(float newinertia) {
 void DynamicBody::applyForce(const sf::Vector2f& localPosition, const sf::Vector2f& appliedForce) {
   sf::Vector2f r = localPosition - centerOfMass;
 
-  float generatedTorque = - math::vector::cross2d(r,  appliedForce);;
+  float generatedTorque = math::vector::cross2d(r,  appliedForce);;
 
   fmtlog::Log(fmtlog::For<DynamicBody>())
       .debug("apply force {%f, %f} to {%f, %f}; r: {%f, %f} torque: %f",
@@ -57,7 +57,7 @@ void DynamicBody::applyForce(const sf::Vector2f& localPosition, const sf::Vector
 void DynamicBody::applyLinearImpulse(const sf::Vector2f& localPosition, const sf::Vector2f& impulse) {
   sf::Vector2f r = localPosition - centerOfMass;
 
-  float angularImpulse = - math::vector::cross2d(r, impulse);
+  float angularImpulse = math::vector::cross2d(r, impulse);
 
   fmtlog::Log(fmtlog::For<DynamicBody>())
     .debug("apply impulse {%f, %f} to {%f, %f}; r: {%f, %f} angular impulse: %f",
