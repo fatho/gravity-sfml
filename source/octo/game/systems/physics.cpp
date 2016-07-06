@@ -2,32 +2,22 @@
 
 using namespace octo::game::systems;
 
-void Physics::update(entityx::EntityManager& es, entityx::EventManager&, entityx::TimeDelta dt) {
-  float timeStep = static_cast<float>(dt);
-  integrate(es, timeStep);
-  // TODO: collision detection & response
+Physics::Physics()
+  : m_b2world({0,0})
+{
 }
 
-void Physics::integrate(entityx::EntityManager& es, float timeStep) {
+void Physics::update(entityx::EntityManager& es, entityx::EventManager&, entityx::TimeDelta dt) {
   using namespace components;
-  es.each<Spatial, DynamicBody>(
-    [timeStep](entityx::Entity, Spatial& spatial, DynamicBody& body) {
+  float timeStep = static_cast<float>(dt);
+  // simulate physics
+  m_b2world.Step(timeStep, 8, 3);
+  // update current and previous position
+  es.each<Spatial, DynamicBody>([](entityx::Entity, Spatial& spatial, DynamicBody& body) {
       spatial.previous() = spatial.current();
-      // using semi-implicit Euler
-
-      // integrate linear motion
-      body.linearMomentum += body.force * timeStep;
-      spatial.current().position += body.velocity() * timeStep;
-
-      // integrate angular motion
-      body.angularMomentum += body.torque * timeStep;
-      spatial.current().rotationRadians() += body.angularVelocity() * timeStep;
-
-      // reset accumulators
-      body.force = sf::Vector2f();
-      body.torque = 0;
+      b2Vec2 pos = body->GetPosition();
+      spatial.current().position = {pos.x, pos.y};
+      spatial.current().rotationRadians() = body->GetAngle();
     });
 }
 
-void Physics::collisionResponse(entityx::EntityManager& es, float timeStep) {
-}

@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(gravity-octo)
 
-find_package(Boost 1.60 REQUIRED filesystem)
-find_package(SFML 2.3 COMPONENTS graphics window audio system)
-find_package(EntityX REQUIRED)
-
 set(SOURCES
   content/contentmanager.cpp
   content/filecontentmanager.cpp
@@ -30,4 +26,6 @@ add_library(octo ${SOURCES})
 target_include_directories(octo PRIVATE
   ${SFML_INCLUDE_DIR}
   ${Boost_INCLUDE_DIRS}
-  ${ENTITYX_INCLUDE_DIR})
+  ${ENTITYX_INCLUDE_DIR}
+  ${BOX2D_INCLUDE_DIRS}
+  )
