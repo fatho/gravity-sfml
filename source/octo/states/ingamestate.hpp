@@ -30,7 +30,7 @@ private:
   std::unique_ptr<game::World> m_world;
   sf::View m_view;
 
-  float m_physicsStep = 1.f / 60.f;
+  float m_physicsStep = 0.01f;
   float m_timeAccumulator = 0;
   int m_maxStepsPerFrame = 10;
 };
