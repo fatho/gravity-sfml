@@ -15,6 +15,7 @@ set(SOURCES
   game.cpp
   gamestate.cpp
   game/world.cpp
+  game/collision/mask.cpp
   game/components/attraction.cpp
   game/components/dynamicbody.cpp
   game/components/planet.cpp
