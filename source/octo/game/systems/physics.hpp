@@ -4,7 +4,6 @@
 #include "../components/dynamicbody.hpp"
 
 #include <entityx/entityx.h>
-#include <Box2D/Dynamics/b2World.h>
 
 namespace octo {
 namespace game {
@@ -14,10 +13,7 @@ namespace systems {
  *
  *  In this system, forces are converted into motion using a semi-implicit Euler integration.
  */
-class Physics : public entityx::System<Physics> {
-public:
-  Physics();
-
+struct Physics : public entityx::System<Physics> {
   /*! \brief Destroys all entities outside of the boundary.
    *
    *  This affects all entities with \ref components::DynamicBody "DynamicBody" component.
@@ -35,17 +31,10 @@ public:
    */
   void update(entityx::EntityManager& es, entityx::EventManager& events, entityx::TimeDelta dt) override;
 
-
-  b2World& engine() {
-    return m_b2world;
-  }
-
-  const b2World& engine() const {
-    return m_b2world;
-  }
-
 private:
-  b2World m_b2world;
+  void integrate(entityx::EntityManager& es, float timeStep);
+
+  void collisionResponse(entityx::EntityManager& es, float timeStep);
 };
 
 }

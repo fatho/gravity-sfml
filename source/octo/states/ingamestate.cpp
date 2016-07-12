@@ -15,11 +15,11 @@ using namespace octo::game::components;
 InGameState::InGameState() {
   // TODO: take world as an argument
   m_world = std::make_unique<game::World>();
-  m_world->setClipRadius(500);
+  m_world->setClipRadius(900);
 
-  m_world->addPlanet({150, 100}, 50, 10000);
-  m_world->addPlanet({-75, -100}, 50, 10000);
-  m_world->spawnDebugBullet({-150, -150}, {80, -70});
+  m_world->addPlanet({300, 200}, 128, 30000);
+  m_world->addPlanet({-150, -200}, 128, 30000);
+  m_world->spawnDebugBullet({-300, -300}, {100, -100});
 
   // m_world->addPlanet({0, 0}, 128, 30000);
   // m_world->spawnDebugBullet({0,-400}, {0, 0});
@@ -113,7 +113,7 @@ void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) c
           .draw(target, states);
     }
     if (body) {
-      DebugDraw::circle(interpolated.position, 0.5).outline(2, sf::Color::Red).draw(target, states);
+      DebugDraw::circle(interpolated.position, 16).outline(2, sf::Color::Red).draw(target, states);
       DebugDraw::rectangle(interpolated.position, {2, 16}, {4, 16}, interpolated.rotationDegrees)
           .fill(sf::Color::Red)
           .draw(target, states);
@@ -124,7 +124,7 @@ void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) c
 void InGameState::rebuildView() {
   sf::Vector2f center = m_view.getCenter(); // save old center
   sf::Vector2u size = game()->window().getSize();
-  m_view.reset(sf::FloatRect(0, 0, size.x, size.y));
+  m_view.reset(sf::FloatRect(0, 0, size.x * 2, size.y * 2));
   m_view.setCenter(center); // restore old center
   game()->window().setView(m_view);
 }
