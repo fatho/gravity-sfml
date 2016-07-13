@@ -5,7 +5,7 @@ namespace game {
 namespace collision {
 
 Mask circle(size_t radius, Pixel fill) {
-  Mask mask(radius * 2, radius * 2, Pixel::NoCollision);
+  Mask mask(radius * 2 + 1, radius * 2 + 1, Pixel::NoCollision);
   int radiusSq = radius * radius;
   for(int y : mask.yrange()) {
     for(int x : mask.xrange()) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <octo/util/pixelarray.hpp>
+#include <octo/game/collision/mask.hpp>
 
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -13,13 +13,18 @@ namespace components {
 /*! \brief Component defining a planet, consisting of its terrain mask and texture.
  */
 struct Collision {
-  /*! \brief the 8-bit collision mask representing the shape of the entity.
-   *
-   *  All pixels with a value not equal to zero are considered to be part of the object.
-   *  Bytes are used instead of just one bit per pixel to allow specific behavior depending
-   *  on which part of an object collided (e.g. when some parts are bouncier than others).
+  /*! \brief Collision mask representing the shape of the entity.
    */
-  util::PixelArray<sf::Uint8> mask;
+  collision::Mask mask;
+  /*! \brief The position of the collision masks center in the entities local coordinate system.
+   */
+  sf::Vector2f anchor;
+
+  Collision();
+
+  Collision(collision::Mask mask);
+
+  Collision(collision::Mask mask, sf::Vector2f anchor);
 };
 
 }

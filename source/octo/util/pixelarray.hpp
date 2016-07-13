@@ -58,7 +58,8 @@ public:
 
   template<typename Converter>
   sf::Image toImage(Converter conv = Converter()) {
-    sf::Image result(m_width, m_height);
+    sf::Image result;
+    result.create(m_width, m_height);
     for(size_t y : yrange()) {
       for(size_t x : xrange()) {
         result.setPixel(x, y, conv(at(x,y)));

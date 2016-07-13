@@ -13,21 +13,8 @@ namespace components {
  *  uniformly stored for all collidable entities in the Collision component.
  */
 struct Planet {
-  /// the image of the terrain used for physics
-  [[deprecated("use Collision component instead")]]
-  sf::Image terrain;
-  /// the replication of the terrain image in VRAM (slow to modify/query)
-  sf::Texture terrainTexture;
-
-  /*! \brief Returns the size of the planet.
-   *  \returns the size of the planet
-   *  \remark This function is currently returning the size of the planets terrain texture.
-   */
-  sf::Vector2f size() const;
-
-  /*! \brief Updates the texture in VRAM to reflect changes made to the terrain.
-   */
-  void updateTexture();
+  sf::Texture backgroundTexture;
+  sf::Texture foregroundTexture;
 };
 
 }

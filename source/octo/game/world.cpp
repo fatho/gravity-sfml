@@ -4,6 +4,7 @@
 #include "systems/attractionsystem.hpp"
 #include "systems/boundaryenforcer.hpp"
 #include "systems/physics.hpp"
+#include "collision/mask.hpp"
 
 using namespace octo::game;
 
@@ -25,19 +26,11 @@ void World::addPlanet(sf::Vector2f position, int radius, float mass) {
   planet.assign<components::Attractor>(
       mass * m_gravitationalConstant, components::Attractor::PlanetBit, radius);
 
-  // create circular planet texture
-  auto planetComp = planet.assign<components::Planet>();
-  planetComp->terrain.create(2 * radius, 2 * radius, sf::Color::Transparent);
-  for (int y = 0; y < 2 * radius; ++y) {
-    for (int x = 0; x < 2 * radius; ++x) {
-      int dx = x - radius;
-      int dy = y - radius;
-      if (dx * dx + dy * dy <= radius * radius) {
-        planetComp->terrain.setPixel(x, y, sf::Color::White);
-      }
-    }
-  }
-  planetComp->updateTexture();
+  planet.assign<components::Planet>();
+  // TODO: load planet textures
+
+  // generate terrain mask
+  planet.assign<components::Collision>(collision::circle(radius, collision::Pixel::Solid));
 }
 
 void World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity) {

@@ -3,6 +3,7 @@
 #include "../game.hpp"
 #include "../game/components.hpp"
 #include "../rendering/debugdraw.hpp"
+#include <octo/game/collision/mask.hpp>
 #include <more-math/all.hpp>
 
 #include <iostream>
@@ -80,11 +81,7 @@ void InGameState::drawBackground(sf::RenderTarget& target) const {
 void InGameState::drawPlanets(sf::RenderTarget& target) const {
   m_world->entities().each<Spatial, Planet>([&](entityx::Entity, Spatial& spatial, Planet& planet) {
     const SpatialSnapshot& interpolated = spatial.interpolated();
-    sf::Sprite planetSprite(planet.terrainTexture);
-    planetSprite.setOrigin(planet.size() * 0.5f);
-    planetSprite.setPosition(interpolated.position);
-    planetSprite.setRotation(interpolated.rotationDegrees);
-    target.draw(planetSprite);
+    // TODO: draw planet textures
   });
 }
 
@@ -94,15 +91,24 @@ void InGameState::debugDraw(sf::RenderTarget& target) const {
       .outline(2, sf::Color::Red)
       .draw(target);
 
+  auto debugMaskConverter = [](game::collision::Pixel pix) {
+    sf::Uint8 val = static_cast<sf::Uint8>(pix);
+    return sf::Color(val, val, val);
+  };
+
   m_world->entities().each<Spatial>([&](entityx::Entity e, Spatial& spatial) {
     const SpatialSnapshot& interpolated = spatial.interpolated();
-    auto planet = e.component<Planet>();
+    auto coll = e.component<Collision>();
     auto body = e.component<DynamicBody>();
-    if (planet) {
-      DebugDraw::rectangle(
-          math::rect::fromCenterSize(spatial.interpolated().position, planet->size()))
-          .outline(2, sf::Color::Blue)
-          .draw(target);
+    if (coll) {
+      sf::Image img { coll->mask.toImage(debugMaskConverter) };
+      sf::Texture tex;
+      tex.loadFromImage(img);
+      sf::Sprite sprite(tex);
+      sprite.setOrigin(math::vector::vector_cast<float>(tex.getSize()) * 0.5f - coll->anchor);
+      sprite.setRotation(interpolated.rotationDegrees);
+      sprite.setPosition(interpolated.position);
+      target.draw(sprite);
     }
     if (body) {
       DebugDraw::circle(interpolated.position, 16).outline(2, sf::Color::Red).draw(target);
