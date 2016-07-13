@@ -40,6 +40,6 @@ void Log::message(Severity sev, const std::string& msg) {
   auto curTime = std::chrono::steady_clock::now();
   std::chrono::duration<double, std::ratio<1>> sinceProgramStart = curTime - ProgramStartTime;
 
-  std::cerr << boost::format("%1$9.3f %2$s %3$s %4$s\n") % sinceProgramStart.count() %
+  std::cerr << boost::format("%1$9.3f %2$-7s [%3$s] %4$s\n") % sinceProgramStart.count() %
     severityToString(sev) % m_scope % msg;
 }
