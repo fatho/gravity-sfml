@@ -45,7 +45,7 @@ void Game::run() {
     topState->update(elapsed);
 
     m_window.clear(sf::Color::Blue);
-    m_window.draw(*topState);
+    topState->draw(m_window);
     m_window.display();
   }
   log.info("game loop finished");

@@ -17,18 +17,20 @@ public:
   void handleEvents() override;
 
 protected:
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-  void drawBackground(sf::RenderTarget& target, sf::RenderStates states) const;
-  void drawPlanets(sf::RenderTarget& target, sf::RenderStates states) const;
-  void debugDraw(sf::RenderTarget& target, sf::RenderStates states) const;
+  void draw(sf::RenderTarget& target) override;
+  void drawBackground(sf::RenderTarget& target) const;
+  void drawPlanets(sf::RenderTarget& target) const;
+  void debugDraw(sf::RenderTarget& target) const;
 
   void activated() override;
 
-  void rebuildView();
+  void applyView(sf::RenderTarget& target) const;
+
 private:
   std::unique_ptr<game::World> m_world;
-  sf::View m_view;
+
+  sf::Vector2f m_viewCenter;
+  float m_viewZoom = 1.0f;
 
   float m_physicsStep = 1.f / 60.f;
   float m_timeAccumulator = 0;

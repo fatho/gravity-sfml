@@ -23,10 +23,6 @@ InGameState::InGameState() {
 
   // m_world->addPlanet({0, 0}, 128, 30000);
   // m_world->spawnDebugBullet({0,-400}, {0, 0});
-
-  // initial view shows everything
-  float worldRadius = m_world->clipRadius();
-  m_view.reset(sf::FloatRect(-worldRadius, -worldRadius, 2 * worldRadius, 2 * worldRadius));
 }
 
 void InGameState::update(sf::Time elapsed) {
@@ -59,10 +55,6 @@ void InGameState::handleEvents() {
       // TODO: ask user or save state before exiting
       window.close();
       break;
-    case sf::Event::Resized:
-      this->rebuildView();
-      // TODO: update "view" after resizing
-      break;
     default:
       break;
     }
@@ -70,37 +62,37 @@ void InGameState::handleEvents() {
 }
 
 void InGameState::activated() {
-  this->rebuildView();
 }
 
-void InGameState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void InGameState::draw(sf::RenderTarget& target) {
+  applyView(target);
   target.clear(sf::Color::Black);
-  drawBackground(target, states);
-  drawPlanets(target, states);
-  debugDraw(target, states);
+  drawBackground(target);
+  drawPlanets(target);
+  debugDraw(target);
 }
 
-void InGameState::drawBackground(sf::RenderTarget& target, sf::RenderStates states) const {
+void InGameState::drawBackground(sf::RenderTarget& target) const {
   // TODO: draw some nice starfield background
   // TODO: draw dangerous looking nebula outside/around world boundary instead of ugly circle
 }
 
-void InGameState::drawPlanets(sf::RenderTarget& target, sf::RenderStates states) const {
+void InGameState::drawPlanets(sf::RenderTarget& target) const {
   m_world->entities().each<Spatial, Planet>([&](entityx::Entity, Spatial& spatial, Planet& planet) {
     const SpatialSnapshot& interpolated = spatial.interpolated();
     sf::Sprite planetSprite(planet.terrainTexture);
     planetSprite.setOrigin(planet.size() * 0.5f);
     planetSprite.setPosition(interpolated.position);
     planetSprite.setRotation(interpolated.rotationDegrees);
-    target.draw(planetSprite, states);
+    target.draw(planetSprite);
   });
 }
 
-void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) const {
+void InGameState::debugDraw(sf::RenderTarget& target) const {
   using rendering::DebugDraw;
   DebugDraw::circle(sf::Vector2f(), m_world->clipRadius())
       .outline(2, sf::Color::Red)
-      .draw(target, states);
+      .draw(target);
 
   m_world->entities().each<Spatial>([&](entityx::Entity e, Spatial& spatial) {
     const SpatialSnapshot& interpolated = spatial.interpolated();
@@ -110,21 +102,20 @@ void InGameState::debugDraw(sf::RenderTarget& target, sf::RenderStates states) c
       DebugDraw::rectangle(
           math::rect::fromCenterSize(spatial.interpolated().position, planet->size()))
           .outline(2, sf::Color::Blue)
-          .draw(target, states);
+          .draw(target);
     }
     if (body) {
-      DebugDraw::circle(interpolated.position, 16).outline(2, sf::Color::Red).draw(target, states);
+      DebugDraw::circle(interpolated.position, 16).outline(2, sf::Color::Red).draw(target);
       DebugDraw::rectangle(interpolated.position, {2, 16}, {4, 16}, interpolated.rotationDegrees)
           .fill(sf::Color::Red)
-          .draw(target, states);
+          .draw(target);
     }
   });
 }
 
-void InGameState::rebuildView() {
-  sf::Vector2f center = m_view.getCenter(); // save old center
-  sf::Vector2u size = game()->window().getSize();
-  m_view.reset(sf::FloatRect(0, 0, size.x * 2, size.y * 2));
-  m_view.setCenter(center); // restore old center
-  game()->window().setView(m_view);
+void InGameState::applyView(sf::RenderTarget& target) const {
+  sf::View view;
+  view.setCenter(m_viewCenter);
+  view.setSize(math::vector::vector_cast<float>(target.getSize()) * m_viewZoom);
+  target.setView(view);
 }

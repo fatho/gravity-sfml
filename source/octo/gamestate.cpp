@@ -31,8 +31,8 @@ void NullState::handleEvents() {
   }
 }
 
-void NullState::update(sf::Time elapsed) {}
+void NullState::update(sf::Time) {}
 
-void NullState::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void NullState::draw(sf::RenderTarget& target) {
   target.clear(sf::Color::Black);
 }

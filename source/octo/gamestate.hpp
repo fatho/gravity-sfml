@@ -15,7 +15,7 @@ class Game;
  *  Game states are intrusively reference counted, i.e. the reference count is stored
  *  as part of this base class, and is accessed through \ref GameStatePtr.
  */
-class GameState : public sf::Drawable, public boost::intrusive_ref_counter<GameState> {
+class GameState : public boost::intrusive_ref_counter<GameState> {
 public:
   /*! \brief Returns a pointer to the game this state is currently registered with.
    *  \returns a pointer to a Game, or \c nullptr if this state is currently not registered with a game.
@@ -37,6 +37,12 @@ public:
    *  \param elapsed the amount of time that elapsed since the last frame
    */
   virtual void update(sf::Time elapsed) = 0;
+
+  /*! \brief Renders the game state to a specific render target.
+   *
+   *  \param target the render target.
+   */
+  virtual void draw(sf::RenderTarget& target) = 0;
 
   /// Virtual destructor.
   virtual ~GameState();
@@ -87,7 +93,6 @@ public:
   void handleEvents() override;
 
 protected:
-  /// \see <a href="http://www.sfml-dev.org/documentation/latest/classsf_1_1Drawable.php">sf::Drawable</a>
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  void draw(sf::RenderTarget& target) override;
 };
 }

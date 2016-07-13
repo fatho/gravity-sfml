@@ -56,6 +56,17 @@ public:
     return *this;
   }
 
+  /*! \brief Renders the shape.
+   *
+   *  This builder is valid after finishing the draw and can be used for further renderings.
+   *  \param target the render target
+   *  \returns a reference to this instance for chaining.
+   */
+  DrawBuilder<ShapeType>& draw(sf::RenderTarget& target) {
+    target.draw(m_shape);
+    return *this;
+  }
+
 private:
   /// the shape under construction
   ShapeType m_shape;

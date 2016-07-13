@@ -78,6 +78,11 @@ inline sf::Vector2<T> cross2d(const sf::Vector2<T>& v, float s) {
   return s * v.y - s * v.x;
 }
 
+template<typename T, typename U>
+inline sf::Vector2<T> vector_cast(const sf::Vector2<U>& v) {
+  return { static_cast<T>(v.x), static_cast<T>(v.y) };
+}
+
 }
 }
 }
