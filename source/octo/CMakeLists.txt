@@ -6,6 +6,9 @@ find_package(SFML 2.3 COMPONENTS graphics window audio system)
 find_package(EntityX REQUIRED)
 
 set(SOURCES
+  game.cpp
+  gamestate.cpp
+  debugoverlay.cpp
   content/contentmanager.cpp
   content/filecontentmanager.cpp
   content/physfscontentmanager.cpp
@@ -13,8 +16,6 @@ set(SOURCES
   content/music.cpp
   content/sfml.cpp
   content/shader.cpp
-  game.cpp
-  gamestate.cpp
   game/world.cpp
   game/collision/mask.cpp
   game/components/attraction.cpp

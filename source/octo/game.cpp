@@ -26,6 +26,10 @@ Game::Game() {
   log.info("creating initial state");
   pushNewState<states::InGameState>();
 
+  // setup debug display
+  log.info("initializing debug overlay");
+  m_debugOverlay.setFont(m_content.load<content::FontContent>("fonts/deja-vu/ttf/DejaVuSansMono.ttf"));
+
   log.info("initialization complete");
 }
 
@@ -38,14 +42,21 @@ void Game::run() {
     sf::Time elapsed = clock.restart();
 
     // as a side effect, this increases the ref-counter of the game state,
-    // ensuring that it will not be destructed while it is still in use.
+    // ensuring that it will not be destructed while it is still in use,
+    // in case that the update function of the state transitions to another state.
     GameStatePtr topState = m_states.top();
 
+    // update state
     topState->handleEvents();
     topState->update(elapsed);
 
+    // update debug
+    m_debugOverlay.update(elapsed);
+
+    // render
     m_window.clear(sf::Color::Blue);
     topState->draw(m_window);
+    m_debugOverlay.draw(m_window);
     m_window.display();
   }
   log.info("game loop finished");

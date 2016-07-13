@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gamestate.hpp"
+#include "debugoverlay.hpp"
 #include "content/filecontentmanager.hpp"
 #include <fmtlog/fmtlog.hpp>
 
@@ -150,5 +151,7 @@ private:
   std::stack<GameStatePtr> m_states;
   /// the content manager
   content::FileContentManager m_content;
+  /// shows useful debugging information
+  DebugOverlay m_debugOverlay;
 };
 }
