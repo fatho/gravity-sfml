@@ -25,6 +25,7 @@ set(SOURCES
   game/components/spatial.cpp
   game/systems/attractionsystem.cpp
   game/systems/boundaryenforcer.cpp
+  game/systems/debug.cpp
   game/systems/physics.cpp
   rendering/debugdraw.cpp
   states/ingamestate.cpp

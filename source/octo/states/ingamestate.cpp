@@ -79,7 +79,7 @@ void InGameState::drawBackground(sf::RenderTarget& target) const {
 }
 
 void InGameState::drawPlanets(sf::RenderTarget& target) const {
-  m_world->entities().each<Spatial, Planet>([&](entityx::Entity, Spatial& spatial, Planet& planet) {
+  m_world->entities.each<Spatial, Planet>([&](entityx::Entity, Spatial& spatial, Planet& planet) {
     const SpatialSnapshot& interpolated = spatial.interpolated();
     // TODO: draw planet textures
   });
@@ -90,20 +90,13 @@ void InGameState::debugDraw(sf::RenderTarget& target) const {
   DebugDraw::circle(sf::Vector2f(), m_world->clipRadius())
       .outline(2, sf::Color::Red)
       .draw(target);
-
-  auto debugMaskConverter = [](game::collision::Pixel pix) {
-    sf::Uint8 val = static_cast<sf::Uint8>(pix);
-    return sf::Color(val, val, val);
-  };
-
-  m_world->entities().each<Spatial>([&](entityx::Entity e, Spatial& spatial) {
+  m_world->entities.each<Spatial>([&](entityx::Entity e, Spatial& spatial) {
     const SpatialSnapshot& interpolated = spatial.interpolated();
+    auto debugData = e.component<DebugData>();
     auto coll = e.component<Collision>();
     auto body = e.component<DynamicBody>();
-    if (coll) {
-      sf::Image img { coll->mask.toImage(debugMaskConverter) };
-      sf::Texture tex;
-      tex.loadFromImage(img);
+    if (debugData && coll) {
+      const sf::Texture& tex = debugData->collisionMaskTexture;
       sf::Sprite sprite(tex);
       sprite.setOrigin(math::vector::vector_cast<float>(tex.getSize()) * 0.5f - coll->anchor);
       sprite.setRotation(interpolated.rotationDegrees);

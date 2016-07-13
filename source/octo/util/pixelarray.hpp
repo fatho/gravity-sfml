@@ -30,11 +30,15 @@ public:
     swap(other, *this);
   }
 
-  size_t index(size_t x, size_t y) {
+  size_t index(size_t x, size_t y) const {
     return y * m_width + x;
   }
 
   PixelType& at(size_t x, size_t y) {
+    return m_pixels[index(x,y)];
+  }
+
+  PixelType at(size_t x, size_t y) const {
     return m_pixels[index(x,y)];
   }
 
@@ -57,7 +61,7 @@ public:
   }
 
   template<typename Converter>
-  sf::Image toImage(Converter conv = Converter()) {
+  sf::Image toImage(Converter conv = Converter()) const {
     sf::Image result;
     result.create(m_width, m_height);
     for(size_t y : yrange()) {

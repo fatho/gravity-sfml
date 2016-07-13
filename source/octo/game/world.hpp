@@ -11,7 +11,7 @@
 namespace octo {
 namespace game {
 
-class World {
+class World : public entityx::EntityX {
 public:
   World();
 
@@ -22,18 +22,6 @@ public:
   void update(float timeStep);
 
   // accessors
-
-  entityx::EntityManager& entities() {
-    return m_es.entities;
-  }
-
-  entityx::SystemManager& systems() {
-    return m_es.systems;
-  }
-
-  entityx::EventManager& events() {
-    return m_es.events;
-  }
 
   /**
    * @brief The radius defining the outer boundary of the world.
@@ -64,10 +52,10 @@ public:
   void interpolateState(float alpha);
 
 private:
-  entityx::EntityX m_es;
   float m_clipRadius;
   std::shared_ptr<systems::BoundaryEnforcer> m_boundaryEnforcer;
-  float m_gravitationalConstant;
+  float m_gravitationalConstant = 100.f;
+  size_t m_updateCount = 0;
 };
 
 }
