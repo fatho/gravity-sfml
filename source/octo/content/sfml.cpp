@@ -2,6 +2,7 @@
 #include "contentmanager.hpp"
 #include "music.hpp"
 #include "shader.hpp"
+#include "font.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Image.hpp>
@@ -19,8 +20,9 @@ void octo::content::sfml::registerSFMLLoaders(octo::content::ContentManager& man
   registerBasicSFMLLoader<sf::Font>(manager);
   registerBasicSFMLLoader<sf::SoundBuffer>(manager);
 
-  // music content requires some extra work to keep the underlying stream alive
+  // music and font content requires some extra work to keep the underlying stream alive
   manager.registerLoader<MusicContent>(std::make_unique<MusicLoader>());
+  manager.registerLoader<FontContent>(std::make_unique<FontLoader>());
 
   // shaders usually consist of two content files
   manager.registerLoader<sf::Shader>(std::make_unique<ShaderLoader>());

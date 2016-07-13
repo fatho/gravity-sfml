@@ -9,6 +9,7 @@ set(SOURCES
   content/contentmanager.cpp
   content/filecontentmanager.cpp
   content/physfscontentmanager.cpp
+  content/font.cpp
   content/music.cpp
   content/sfml.cpp
   content/shader.cpp
@@ -25,6 +26,7 @@ set(SOURCES
   game/systems/physics.cpp
   rendering/debugdraw.cpp
   states/ingamestate.cpp
+  util/fpscounter.cpp
   )
 
 add_library(octo ${SOURCES})
