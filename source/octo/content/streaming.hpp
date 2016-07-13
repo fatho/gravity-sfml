@@ -1,11 +1,11 @@
 #pragma once
 
 #include "contentmanager.hpp"
+#include <fmtlog/fmtlog.hpp>
 
 #include <boost/format.hpp>
 #include <SFML/System/InputStream.hpp>
 
-#include <functional>
 #include <memory>
 
 namespace octo {
@@ -41,6 +41,7 @@ public:
     if (!m_contentStream || !Streamable<ContentType>::open(m_content, *m_contentStream)) {
       throw ContentLoadException(boost::format("could not load streaming content").str());
     }
+    log.debug("created: %p", m_contentStream.get());
   }
 
   /// returns the underlying content object
@@ -48,7 +49,12 @@ public:
     return m_content;
   }
 
+  ~StreamingContent() {
+    log.debug("deleted: %p", m_contentStream.get());
+  }
+
 private:
+  fmtlog::Log log = fmtlog::For<StreamingContent<ContentType>>();
   std::unique_ptr<sf::InputStream> m_contentStream;
   ContentType m_content;
 };

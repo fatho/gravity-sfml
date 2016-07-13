@@ -98,7 +98,8 @@ public:
    */
   template <class AssetType>
   std::shared_ptr<AssetType> load(const std::string& contentPath, bool useCache = true) {
-    return load(typeid(AssetType), contentPath, useCache);
+    // note that while this looks unsafe, type safety is dynamically ensured by using RTTI.
+    return std::static_pointer_cast<AssetType>(load(typeid(AssetType), contentPath, useCache));
   }
 
   /*! \brief Registers a ContentLoader with this content manager.

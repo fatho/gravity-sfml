@@ -27,7 +27,7 @@ void ContentManager::registerLoader(const boost::typeindex::type_index& ContentT
         std::make_pair(boost::typeindex::type_index(ContentType), std::move(loader)));
   } else {
     this->m_loaders.erase(ContentType);
-    log.debug("unregistered loader for %s", ContentType.name());
+    log.debug("unregistered loader for %s", ContentType.pretty_name());
   }
 }
 
@@ -49,6 +49,7 @@ std::shared_ptr<void> ContentManager::load(const boost::typeindex::type_index& c
   auto loaderIt = this->m_loaders.find(contentType);
   if (loaderIt != this->m_loaders.end()) {
     ContentLoader& loader = *(*loaderIt).second;
+    log.debug("using %s to load %s", boost::typeindex::type_id_runtime(loader).pretty_name(), contentType.pretty_name());
     auto contentPtr = loader.load(*this, contentId);
     log.debug("loaded %s", contentId);
     if (useCache) {
