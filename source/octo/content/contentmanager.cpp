@@ -1,7 +1,7 @@
 #include "contentmanager.hpp"
 
-#include <boost/format.hpp>
 #include <SFML/System/FileInputStream.hpp>
+#include <boost/format.hpp>
 
 using namespace octo::content;
 
@@ -14,8 +14,7 @@ ContentLoadException::ContentLoadException(const std::string& message)
 
 ContentManager::ContentManager() {}
 
-ContentManager::~ContentManager() {
-}
+ContentManager::~ContentManager() {}
 
 void ContentManager::registerLoader(const boost::typeindex::type_index& ContentType,
                                     std::unique_ptr<ContentLoader> loader) {
@@ -24,9 +23,10 @@ void ContentManager::registerLoader(const boost::typeindex::type_index& ContentT
     log.debug("registered loader %s for content type %s",
               boost::typeindex::type_id_runtime(*ptr).pretty_name(),
               ContentType.pretty_name());
-    this->loaders.insert(std::make_pair(boost::typeindex::type_index(ContentType), std::move(loader)));
+    this->m_loaders.insert(
+        std::make_pair(boost::typeindex::type_index(ContentType), std::move(loader)));
   } else {
-    this->loaders.erase(ContentType);
+    this->m_loaders.erase(ContentType);
     log.debug("unregistered loader for %s", ContentType.name());
   }
 }
@@ -36,8 +36,8 @@ std::shared_ptr<void> ContentManager::load(const boost::typeindex::type_index& c
   using boost::format;
   if (useCache) {
     // check if content is still in cache and weak_ptr has not yet expired
-    auto contentIt = this->contentCache.find(contentId);
-    if (contentIt != this->contentCache.end()) {
+    auto contentIt = this->m_contentCache.find(contentId);
+    if (contentIt != this->m_contentCache.end()) {
       if (auto ContentPtr = (*contentIt).second.lock()) {
         log.debug("cache hit for %s", contentId);
         return ContentPtr;
@@ -46,17 +46,28 @@ std::shared_ptr<void> ContentManager::load(const boost::typeindex::type_index& c
   }
 
   // otherwise, load (again)
-  auto loaderIt = this->loaders.find(contentType);
-  if (loaderIt != this->loaders.end()) {
+  auto loaderIt = this->m_loaders.find(contentType);
+  if (loaderIt != this->m_loaders.end()) {
     ContentLoader& loader = *(*loaderIt).second;
     auto contentPtr = loader.load(*this, contentId);
     log.debug("loaded %s", contentId);
-    if(useCache) {
-      this->contentCache.insert(std::make_pair(contentId, contentPtr));
+    if (useCache) {
+      this->m_contentCache.insert(std::make_pair(contentId, contentPtr));
     }
     return contentPtr;
   } else {
     throw ContentLoadException(
         boost::str(format("no Content loader for Content type '%s'") % contentType.name()));
+  }
+}
+
+void ContentManager::cleanupCache() {
+  // remove all expired references
+  for(auto iter = begin(m_contentCache); iter != end(m_contentCache);) {
+    if(iter->second.expired()) {
+      iter = m_contentCache.erase(iter);
+    } else {
+      ++iter;
+    }
   }
 }

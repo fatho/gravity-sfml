@@ -136,13 +136,17 @@ public:
   std::shared_ptr<void> load(const boost::typeindex::type_index& assetType,
                              const std::string& contentPath, bool useCache);
 
+  /*! \brief Removes all expired references from the cache.
+   */
+  void cleanupCache();
+
 private:
   /// Content manager logger
   fmtlog::Log log = fmtlog::For<ContentManager>();
   /// loader registration mapping a loader to an asset type
-  boost::unordered_map<boost::typeindex::type_index, std::unique_ptr<ContentLoader>> loaders;
+  boost::unordered_map<boost::typeindex::type_index, std::unique_ptr<ContentLoader>> m_loaders;
   /// weak pointer cache for content
-  boost::unordered_map<std::string, std::weak_ptr<void>> contentCache;
+  boost::unordered_map<std::string, std::weak_ptr<void>> m_contentCache;
 };
 }
 }
