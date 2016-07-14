@@ -1,7 +1,7 @@
 #include "attractionsystem.hpp"
 
 #include "../components/dynamicbody.hpp"
-#include <more-math/vector.hpp>
+#include <octo/math/vector.hpp>
 
 #include <cmath>
 #include <iostream>

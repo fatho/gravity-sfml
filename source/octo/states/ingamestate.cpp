@@ -3,7 +3,7 @@
 #include "../game.hpp"
 #include "../game/components.hpp"
 #include "../rendering/debugdraw.hpp"
-#include <more-math/all.hpp>
+#include <octo/math/all.hpp>
 #include <octo/game/collision/mask.hpp>
 
 #include <iostream>

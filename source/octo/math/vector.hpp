@@ -17,16 +17,40 @@ inline T dot(const sf::Vector2<T>& va, const sf::Vector2<T>& vb) {
   return va.x * vb.x + va.y * vb.y;
 }
 
+/*! \brief Computes the square of the length of the vector.
+ *
+ *  Note that this function is faster than \ref length, since it only
+ *  consists of two multiplications and one addition.
+ *
+ *  \param vec the vector whose squared length should be computed.
+ *  \returns the square of the vector's length.
+ */
 template<typename T>
 inline T lengthSquared(const sf::Vector2<T>& vec) {
   return dot(vec, vec);
 }
 
+/*! \brief Computes the length of a vector.
+ *
+ *  It is computed by taking the square root of \ref lengthSquared.
+ *
+ *  \param vec the vector whose length should be computed
+ *  \returns the length of the vector.
+ */
 template<typename T>
 inline T length(const sf::Vector2<T>& vec) {
   return static_cast<T>(sqrt(lengthSquared(vec)));
 }
 
+/*! \brief Normalizes a vector.
+ *
+ *  \note This function does not check the length of the vector.
+ *  If it is called on vectors of (almost) zero length,
+ *  the resulting vector might contain \c NaN or \c infinite values.
+ *
+ *  \param vec the vector to be normalized.
+ *  \returns a normalized vector.
+ */
 template<typename T>
 inline sf::Vector2<T> normalized(const sf::Vector2<T>& vec) {
   return vec / length(vec);
@@ -78,11 +102,24 @@ inline sf::Vector2<T> cross2d(const sf::Vector2<T>& v, float s) {
   return s * v.y - s * v.x;
 }
 
+/*! \brief Casts both components of a vector.
+ *  \tparam T destination type
+ *  \tparam U source type
+ *  \param v the vector to be converted.
+ *  \returns a vector with \p v's components cast to type \p T.
+ */
 template<typename T, typename U>
 inline sf::Vector2<T> vector_cast(const sf::Vector2<U>& v) {
   return { static_cast<T>(v.x), static_cast<T>(v.y) };
 }
 
+/*! \brief Maps over both components of a vector.
+ *  \tparam T the source type
+ *  \tparam MapFn the type of the mapping function
+ *  \param v the vector to be mapped.
+ *  \param fn the mapping function.
+ *  \returns the mapped vector.
+ */
 template<typename T, typename MapFn>
 inline auto map(const sf::Vector2<T>& v, MapFn fn) -> sf::Vector2<decltype(fn(v.x))> {
   return { fn(v.x), fn(v.y) };

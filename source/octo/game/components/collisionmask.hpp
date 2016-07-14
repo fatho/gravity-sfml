@@ -1,7 +1,7 @@
 #pragma once
 
 #include <octo/game/collision/mask.hpp>
-#include <more-math/vector.hpp>
+#include <octo/math/vector.hpp>
 
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Texture.hpp>

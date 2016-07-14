@@ -10,21 +10,40 @@
 namespace octo {
 namespace util {
 
+/*! \brief A two dimensional array of pixels.
+ */
 template<typename PixelType = sf::Uint32>
 class PixelArray {
 public:
+  /// The type of coordinate ranges
   using coord_range = boost::integer_range<size_t>;
 
+  /*! \brief Initializes the pixel array.
+   *  \param width the width of the array
+   *  \param height the height of the array
+   *  \param fill the initial value for a pixel
+   */
   PixelArray(size_t width, size_t height, PixelType fill = static_cast<PixelType>(0))
     : m_pixels(width * height, fill), m_width(width), m_height(height)
   {
   }
 
+  /*! \brief Moves the pixels from \p other to a new instance.
+   *
+   *  The \p other instance is left with an empty array, i.e. width and height are zero.
+   *  \param other the pixel array to move from.
+   */
   PixelArray(PixelArray&& other)
     : m_width(0), m_height(0) {
     swap(*this, other);
   }
 
+  /*! \brief Moves the pixels from \p other to this instance.
+   *
+   *  The \p other instance is left with an empty array, i.e. width and height are zero.
+   *  \param other the pixel array to move from.
+   *  \returns a reference to \c *this.
+   */
   PixelArray& operator=(PixelArray&& other) {
     PixelArray destruct;
     swap(*this, destruct);

@@ -14,8 +14,18 @@
 */
 
 /*!
+  \namespace octo::game::collision
+  \brief Contains the collision detection functionality.
+*/
+
+/*!
   \namespace octo::game::components
   \brief Contains the components used in the ECS.
+*/
+
+/*!
+  \namespace octo::game::events
+  \brief Contains the event classes that are used to communicate between systems.
 */
 
 /*!
@@ -24,7 +34,17 @@
 */
 
 /*!
-  \namespace octo::game::states
+  \namespace octo::math
+  \brief Contains additional math functions that are not present in the used libraries.
+ */
+
+/*!
+  \namespace octo::rendering
+  \brief Contains the rendering code.
+*/
+
+/*!
+  \namespace octo::states
   \brief Contains the game states.
 */
 

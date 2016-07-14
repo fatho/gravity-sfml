@@ -11,7 +11,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 # build sub components
 add_subdirectory(fmtlog)
 add_subdirectory(cpp-physfs)
-add_subdirectory(more-math)
 add_subdirectory(octo)
 
 add_executable(gravity main.cpp)
@@ -25,7 +24,6 @@ target_link_libraries(gravity
   octo
   fmtlog
   cpp-physfs
-  more-math
   # third party libraries
   ${SFML_LIBRARIES}
   ${Boost_LIBRARIES}

@@ -5,7 +5,7 @@
 #include <fmtlog/fmtlog.hpp>
 
 #include <cmath>
-#include <more-math/vector.hpp>
+#include <octo/math/vector.hpp>
 
 using namespace octo::game::components;
 

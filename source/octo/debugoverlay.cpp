@@ -1,7 +1,7 @@
 #include "debugoverlay.hpp"
 
-#include <more-math/vector.hpp>
-#include <more-math/rect.hpp>
+#include <octo/math/vector.hpp>
+#include <octo/math/rect.hpp>
 
 #include <SFML/Graphics.hpp>
 #include <boost/format.hpp>
