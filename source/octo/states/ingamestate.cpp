@@ -28,6 +28,9 @@ InGameState::InGameState() {
 }
 
 void InGameState::update(sf::Time elapsed) {
+  if(m_paused) {
+    return;
+  }
   // fill time accumulator
   double elapsedSeconds = elapsed.asSeconds();
   if (elapsedSeconds > 0.125) {
@@ -35,7 +38,7 @@ void InGameState::update(sf::Time elapsed) {
     // note that this will cause the simulation to run slower
     elapsedSeconds = 0.125f;
   }
-  m_timeAccumulator += elapsedSeconds;
+  m_timeAccumulator += elapsedSeconds * m_timeFactor;
 
   // perform fixed time steps on accumulated time
   while (m_timeAccumulator >= m_physicsStep) {
@@ -56,6 +59,29 @@ void InGameState::handleEvents() {
     case sf::Event::Closed:
       // TODO: ask user or save state before exiting
       window.close();
+      break;
+    case sf::Event::KeyPressed:
+      switch (event.key.code) {
+      case sf::Keyboard::Space:
+        m_paused = !m_paused;
+        break;
+      case sf::Keyboard::LShift:
+        m_timeFactor = 0.4f;
+        log.debug("bullet time activated");
+        break;
+      default:
+        break;
+      }
+      break;
+    case sf::Event::KeyReleased:
+      switch (event.key.code) {
+      case sf::Keyboard::LShift:
+        m_timeFactor = 1.0f;
+        log.debug("bullet time deactivated");
+        break;
+      default:
+        break;
+      }
       break;
     default:
       break;
