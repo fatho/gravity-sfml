@@ -4,6 +4,7 @@
 #include <boost/range/irange.hpp>
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 namespace octo {
@@ -31,6 +32,8 @@ public:
   }
 
   size_t index(size_t x, size_t y) const {
+    assert(x >= 0 && x < m_width);
+    assert(y >= 0 && y < m_height);
     return y * m_width + x;
   }
 
@@ -53,11 +56,11 @@ public:
   }
 
   coord_range xrange() const {
-    return boost::irange(static_cast<size_t>(0), m_width - 1);
+    return boost::irange(static_cast<size_t>(0), m_width);
   }
 
   coord_range yrange() const {
-    return boost::irange(static_cast<size_t>(0), m_height - 1);
+    return boost::irange(static_cast<size_t>(0), m_height);
   }
 
   template<typename Converter>
