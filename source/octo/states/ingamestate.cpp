@@ -3,12 +3,13 @@
 #include "../game.hpp"
 #include "../game/components.hpp"
 #include "../rendering/debugdraw.hpp"
-#include <octo/game/collision/mask.hpp>
 #include <more-math/all.hpp>
+#include <octo/game/collision/mask.hpp>
 
 #include <iostream>
 
 #include <SFML/Graphics.hpp>
+#include <boost/math/constants/constants.hpp>
 
 using namespace octo::states;
 using namespace octo::game::components;
@@ -62,8 +63,7 @@ void InGameState::handleEvents() {
   }
 }
 
-void InGameState::activated() {
-}
+void InGameState::activated() {}
 
 void InGameState::draw(sf::RenderTarget& target) {
   applyView(target);
@@ -87,14 +87,13 @@ void InGameState::drawPlanets(sf::RenderTarget& target) const {
 
 void InGameState::debugDraw(sf::RenderTarget& target) const {
   using rendering::DebugDraw;
-  DebugDraw::circle(sf::Vector2f(), m_world->clipRadius())
-      .outline(2, sf::Color::Red)
-      .draw(target);
+  DebugDraw::circle(sf::Vector2f(), m_world->clipRadius()).outline(2, sf::Color::Red).draw(target);
   m_world->entities.each<Spatial>([&](entityx::Entity e, Spatial& spatial) {
     const SpatialSnapshot& interpolated = spatial.interpolated();
     auto debugData = e.component<DebugData>();
     auto coll = e.component<CollisionMask>();
     auto body = e.component<DynamicBody>();
+    // show collision mask
     if (debugData && coll) {
       const sf::Texture& tex = debugData->collisionMaskTexture;
       sf::Sprite sprite(tex);
@@ -103,10 +102,19 @@ void InGameState::debugDraw(sf::RenderTarget& target) const {
       sprite.setPosition(interpolated.position);
       target.draw(sprite);
     }
+    // show rotation
+    DebugDraw::rectangle(interpolated.position, {0.5, 16}, {1, 16}, interpolated.rotationDegrees)
+        .fill(sf::Color::Red)
+        .draw(target);
+    // show velocity
     if (body) {
-      DebugDraw::circle(interpolated.position, 16).outline(2, sf::Color::Red).draw(target);
-      DebugDraw::rectangle(interpolated.position, {2, 16}, {4, 16}, interpolated.rotationDegrees)
-          .fill(sf::Color::Red)
+      auto vel = body->velocity();
+      float mag = math::vector::length(vel);
+      DebugDraw::rectangle(interpolated.position,
+                           {0, 0.5},
+                           {mag, 1},
+                           std::atan2(vel.y, vel.x) * 180.f / boost::math::constants::pi<float>())
+          .fill(sf::Color::Green)
           .draw(target);
     }
   });
