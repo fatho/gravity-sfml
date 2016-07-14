@@ -5,8 +5,8 @@ namespace game {
 namespace systems {
 
 void Debug::configure(entityx::EventManager& events) {
-  events.subscribe<events::ComponentModified<components::Collision>>(*this);
-  events.subscribe<entityx::ComponentAddedEvent<components::Collision>>(*this);
+  events.subscribe<events::ComponentModified<components::CollisionMask>>(*this);
+  events.subscribe<entityx::ComponentAddedEvent<components::CollisionMask>>(*this);
   events.subscribe<entityx::EntityCreatedEvent>(*this);
 }
 
@@ -17,15 +17,15 @@ void Debug::receive(const entityx::EntityCreatedEvent& event) {
   entityx::Entity(event.entity).assign<components::DebugData>();
 }
 
-void Debug::receive(const entityx::ComponentAddedEvent<components::Collision>& event) {
+void Debug::receive(const entityx::ComponentAddedEvent<components::CollisionMask>& event) {
   updateCollisionMask(event.component, entityx::Entity(event.entity).component<components::DebugData>());
 }
 
-void Debug::receive(const events::ComponentModified<components::Collision>& event) {
+void Debug::receive(const events::ComponentModified<components::CollisionMask>& event) {
   updateCollisionMask(event.component, entityx::Entity(event.entity).component<components::DebugData>());
 }
 
-void Debug::updateCollisionMask(entityx::ComponentHandle<components::Collision> collision,
+void Debug::updateCollisionMask(entityx::ComponentHandle<components::CollisionMask> collision,
                          entityx::ComponentHandle<components::DebugData> debugData) {
   auto debugMaskConverter = [](game::collision::Pixel pix) {
     return pix == game::collision::Pixel::NoCollision ? sf::Color::Transparent : sf::Color::White;

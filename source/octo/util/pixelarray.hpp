@@ -72,6 +72,18 @@ public:
     return result;
   }
 
+  size_t width() const {
+    return m_width;
+  }
+
+  size_t height() const {
+    return m_height;
+  }
+
+  sf::Vector2<size_t> size() const {
+    return { m_width, m_height };
+  }
+
 private:
   template<typename Pixel>
   friend void swap(PixelArray<Pixel>& a1, PixelArray<Pixel>& a2);

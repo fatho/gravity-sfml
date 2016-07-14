@@ -10,7 +10,7 @@ namespace components {
 
 /*! \brief Component defining a planet, consisting of its terrain mask and texture.
  *  \todo Remove terrain mask and add planet-specific properties here, since the mask is now
- *  uniformly stored for all collidable entities in the Collision component.
+ *  uniformly stored for all collidable entities in the CollisionMask component.
  */
 struct Planet {
   sf::Texture backgroundTexture;

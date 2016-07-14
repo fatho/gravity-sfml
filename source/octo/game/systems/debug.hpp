@@ -18,12 +18,12 @@ struct Debug : public entityx::System<Debug>, public entityx::Receiver<Debug> {
 
   void receive(const entityx::EntityCreatedEvent& event);
 
-  void receive(const events::ComponentModified<components::Collision>& event);
+  void receive(const events::ComponentModified<components::CollisionMask>& event);
 
-  void receive(const entityx::ComponentAddedEvent<components::Collision>& event);
+  void receive(const entityx::ComponentAddedEvent<components::CollisionMask>& event);
 
 private:
-  void updateCollisionMask(entityx::ComponentHandle<components::Collision> collision,
+  void updateCollisionMask(entityx::ComponentHandle<components::CollisionMask> collision,
                            entityx::ComponentHandle<components::DebugData> debugData);
 };
 }

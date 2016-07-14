@@ -93,7 +93,7 @@ void InGameState::debugDraw(sf::RenderTarget& target) const {
   m_world->entities.each<Spatial>([&](entityx::Entity e, Spatial& spatial) {
     const SpatialSnapshot& interpolated = spatial.interpolated();
     auto debugData = e.component<DebugData>();
-    auto coll = e.component<Collision>();
+    auto coll = e.component<CollisionMask>();
     auto body = e.component<DynamicBody>();
     if (debugData && coll) {
       const sf::Texture& tex = debugData->collisionMaskTexture;

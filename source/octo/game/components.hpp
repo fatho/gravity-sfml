@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/attraction.hpp"
-#include "components/collision.hpp"
+#include "components/collisionmask.hpp"
 #include "components/debugdata.hpp"
 #include "components/dynamicbody.hpp"
 #include "components/planet.hpp"

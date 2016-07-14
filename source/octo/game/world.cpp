@@ -28,7 +28,7 @@ void World::addPlanet(sf::Vector2f position, int radius, float mass) {
   planet.assign<components::Planet>();
   // TODO: load planet textures
 
-  planet.assign<components::Collision>(collision::circle(radius, collision::Pixel::Solid));
+  planet.assign<components::CollisionMask>(collision::circle(radius, collision::Pixel::Solid));
 }
 
 void World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity) {
@@ -40,7 +40,7 @@ void World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity) {
   body->setInertia(1);
   body->setVelocity(velocity);
   bullet.assign<components::Attractable>(1, components::Attractable::PlanetBit);
-  bullet.assign<components::Collision>(collision::circle(8, collision::Pixel::Solid));
+  bullet.assign<components::CollisionMask>(collision::circle(4, collision::Pixel::Solid));
 }
 
 void World::update(float timeStep) {

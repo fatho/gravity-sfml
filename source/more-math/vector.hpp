@@ -83,6 +83,11 @@ inline sf::Vector2<T> vector_cast(const sf::Vector2<U>& v) {
   return { static_cast<T>(v.x), static_cast<T>(v.y) };
 }
 
+template<typename T, typename MapFn>
+inline auto map(const sf::Vector2<T>& v, MapFn fn) -> sf::Vector2<decltype(fn(v.x))> {
+  return { fn(v.x), fn(v.y) };
+}
+
 }
 }
 }
