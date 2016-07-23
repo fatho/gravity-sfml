@@ -3,10 +3,6 @@
 #include <octo/game/collision/mask.hpp>
 #include <octo/math/vector.hpp>
 
-#include <SFML/Graphics/Image.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-
 namespace octo {
 namespace game {
 namespace components {

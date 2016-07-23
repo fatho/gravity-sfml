@@ -1,7 +1,5 @@
 #pragma once
 
-#include "spatial.hpp"
-
 #include <SFML/System/Vector2.hpp>
 
 namespace octo {

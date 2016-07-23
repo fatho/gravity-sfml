@@ -1,6 +1,8 @@
 #include "attractionsystem.hpp"
 
+#include "../components/attraction.hpp"
 #include "../components/dynamicbody.hpp"
+#include "../components/spatial.hpp"
 #include <octo/math/vector.hpp>
 
 #include <cmath>

@@ -1,8 +1,5 @@
 #pragma once
 
-#include "../components/spatial.hpp"
-#include "../components/attraction.hpp"
-
 #include <entityx/entityx.h>
 
 namespace octo {

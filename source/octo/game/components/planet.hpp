@@ -1,19 +1,24 @@
 #pragma once
 
-#include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Sprite.hpp>
 
 namespace octo {
 namespace game {
 namespace components {
 
 /*! \brief Component defining a planet, consisting of its terrain mask and texture.
- *  \todo Remove terrain mask and add planet-specific properties here, since the mask is now
- *  uniformly stored for all collidable entities in the CollisionMask component.
+ *
+ *  \todo add atmospheric parameters
  */
 struct Planet {
+  /*! \brief Texture of the planets background.
+   *
+   *   It should fill the parts of the planet where terrain is missing,
+   *   but that actually belong to the planet.
+   */
   sf::Texture backgroundTexture;
+  /*! \brief Defines the texture of the planets terrain.
+   */
   sf::Texture foregroundTexture;
 };
 
