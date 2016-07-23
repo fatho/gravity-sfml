@@ -5,6 +5,7 @@
 #include <entityx/entityx.h>
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Transform.hpp>
 
 #include <memory>
 
@@ -28,18 +29,13 @@ public:
    *
    * Every entity moving past this boundary will be destroyed.
    */
-  float clipRadius() const {
-    return m_clipRadius;
-  }
+  float clipRadius() const;
 
   /**
    * @brief Sets the outer boundary of the world.
    * @param radius the new radius of the boundary
    */
-  void setClipRadius(float radius) {
-    m_clipRadius = radius;
-    m_boundaryEnforcer->setBoundaryRadius(radius);
-  }
+  void setClipRadius(float radius);
 
   /*! \brief Interpolates the world state between the current and last update.
    *
@@ -53,7 +49,6 @@ public:
 
 private:
   float m_clipRadius;
-  std::shared_ptr<systems::BoundaryEnforcer> m_boundaryEnforcer;
   float m_gravitationalConstant = 100.f;
   size_t m_updateCount = 0;
 };

@@ -22,11 +22,14 @@ set(SOURCES
   game/components/collisionmask.cpp
   game/components/dynamicbody.cpp
   game/components/planet.cpp
+  game/components/projectile.cpp
   game/components/spatial.cpp
   game/systems/attractionsystem.cpp
   game/systems/boundaryenforcer.cpp
+  game/systems/collision.cpp
   game/systems/debug.cpp
   game/systems/physics.cpp
+  game/systems/projectiles.cpp
   rendering/debugdraw.cpp
   states/ingamestate.cpp
   util/fpscounter.cpp

@@ -7,10 +7,12 @@
 using namespace octo::game;
 
 World::World() {
-  // configure entity component system
+  // configure entity component system (order is important)
   systems.add<systems::Attraction>();
-  systems.add<systems::Physics>();
-  m_boundaryEnforcer = systems.add<systems::BoundaryEnforcer>(0);
+  systems.add<systems::Collision>(*this);
+  systems.add<systems::Projectiles>();
+  systems.add<systems::Physics>(*this);
+  systems.add<systems::BoundaryEnforcer>(0);
   systems.add<systems::Debug>();
   systems.configure();
 
@@ -41,11 +43,21 @@ void World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity) {
   body->setVelocity(velocity);
   bullet.assign<components::Attractable>(1, components::Attractable::PlanetBit);
   bullet.assign<components::CollisionMask>(collision::circle(4, collision::Pixel::Solid));
+  bullet.assign_from_copy(components::Projectile { 30 });
 }
 
 void World::update(float timeStep) {
   systems.update_all(timeStep);
   m_updateCount += 1;
+}
+
+float World::clipRadius() const {
+  return m_clipRadius;
+}
+
+void World::setClipRadius(float radius) {
+  m_clipRadius = radius;
+  systems.system<systems::BoundaryEnforcer>()->setBoundaryRadius(radius);
 }
 
 void World::interpolateState(float alpha) {

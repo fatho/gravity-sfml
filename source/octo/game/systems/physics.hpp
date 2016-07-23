@@ -2,6 +2,7 @@
 
 #include "../components/spatial.hpp"
 #include "../components/dynamicbody.hpp"
+#include "../world.hpp"
 #include <fmtlog/fmtlog.hpp> 
 
 #include <entityx/entityx.h>
@@ -15,6 +16,8 @@ namespace systems {
  *  In this system, forces are converted into motion using a semi-implicit Euler integration.
  */
 struct Physics : public entityx::System<Physics> {
+  Physics(World& world);
+
   /*! \brief Performs physics calculations.
    *  \param es the entity system involved,
    *  \param events (currently) unused,
@@ -25,10 +28,9 @@ struct Physics : public entityx::System<Physics> {
 private:
   void integrate(entityx::EntityManager& es, float timeStep);
 
-  void collisionDetection(entityx::EntityManager& es, float timeStep);
-
 private:
   fmtlog::Log log = fmtlog::For<Physics>();
+  World& m_world;
 };
 
 }

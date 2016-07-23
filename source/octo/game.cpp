@@ -20,7 +20,7 @@ Game::Game() {
   // setup graphics
   log.info("creating window");
   m_window.create(sf::VideoMode(800, 600), "Gravity");
-  m_window.setVerticalSyncEnabled(true);
+  m_window.setVerticalSyncEnabled(false);
 
   // setup state
   log.info("creating initial state");

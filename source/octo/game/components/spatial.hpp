@@ -5,6 +5,7 @@
 #include <cmath>
 #include <boost/math/constants/constants.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Transform.hpp>
 
 namespace octo {
 namespace game {
@@ -96,6 +97,10 @@ public:
    *  \warning The returned reference is only valid as long a this instance is still alive.
    */
   internal::RadView<float> rotationRadians();
+
+  sf::Transform localToGlobal() const;
+
+  sf::Transform globalToLocal() const;
 };
 
 struct Spatial : public util::Interpolated<SpatialSnapshot> {
