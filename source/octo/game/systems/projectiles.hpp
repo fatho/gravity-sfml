@@ -4,6 +4,8 @@
 #include <fmtlog/fmtlog.hpp>
 #include <entityx/entityx.h>
 
+#include <vector>
+
 namespace octo {
 namespace game {
 namespace systems {
@@ -18,21 +20,29 @@ struct Projectiles : public entityx::System<Projectiles>, public entityx::Receiv
   void receive(const events::EntityCollision& event);
 
 private:
-
+  /*! \brief Checks whether an entity is a projectile.
+   *
+   *  Everything with a component::Projectile component is a projectile.
+   *
+   *  \returns \c true if and only if \p entity is a projectile.
+   */
   static bool isProjectile(entityx::Entity entity);
 
-  /*! \brief Handles collisions between two projectiles.
+  /*! \brief Triggers the effects of a projectile.
    *
-   *  \remark In this case, all of the relevant logic is contained in this system.
+   *  Typically, this would happen due to the projectile colliding with something,
+   *  but ultimately, it depends on the specific type of the projectile.
+   *
+   *  \param events the event manager
+   *  \param projectileEntity the projectile being triggered
    */
-  void interProjectileCollision(const events::EntityCollision& collision);
-
-  /*! \brief Handles collisions between a projectile and something else.
-   */
-  void projectileHit(entityx::Entity projectile, entityx::Entity other);
+  void triggerProjectile(entityx::EventManager& events, entityx::Entity projectileEntity);
 
 private:
   fmtlog::Log log = fmtlog::For<Projectiles>();
+
+  std::vector<events::EntityCollision> m_projectileCollisions;
+  std::vector<events::EntityCollision> m_projectileHits;
 };
 
 }

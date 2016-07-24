@@ -11,8 +11,8 @@ struct ComponentModified {
   entityx::Entity entity;
   entityx::ComponentHandle<T> component;
 
-  ComponentModified(entityx::Entity entityArg, entityx::ComponentHandle<T> componentHandle)
-      : entity(entityArg), component(componentHandle) {}
+  ComponentModified(entityx::Entity entityArg)
+    : entity(entityArg), component(entityArg.component<T>()) {}
 };
 
 }

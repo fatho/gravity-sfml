@@ -24,10 +24,14 @@ set(SOURCES
   game/components/planet.cpp
   game/components/projectile.cpp
   game/components/spatial.cpp
+  game/events/componentmodified.cpp
+  game/events/entitycollision.cpp
+  game/events/explode.cpp
   game/systems/attractionsystem.cpp
   game/systems/boundaryenforcer.cpp
   game/systems/collision.cpp
   game/systems/debug.cpp
+  game/systems/explosions.cpp
   game/systems/physics.cpp
   game/systems/projectiles.cpp
   rendering/debugdraw.cpp

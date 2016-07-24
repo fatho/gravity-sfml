@@ -6,6 +6,7 @@
 #include <octo/math/all.hpp>
 #include <octo/game/collision/mask.hpp>
 
+#include <cmath>
 #include <iostream>
 
 #include <SFML/Graphics.hpp>
@@ -21,7 +22,12 @@ InGameState::InGameState() {
 
   m_world->addPlanet({300, 200}, 128, 30000);
   m_world->addPlanet({-150, -200}, 128, 30000);
-  m_world->spawnDebugBullet({-300, -300}, {100, -100});
+
+  for(float angle = 0; angle < 360; angle += 36) {
+    float rad = angle / 180.f * boost::math::constants::pi<float>();
+    sf::Vector2f dir { std::cos(rad), std::sin(rad) };
+    m_world->spawnDebugBullet(sf::Vector2f {-320, -320} + dir * 15.f, dir * 120.f);
+  }
 
   // m_world->addPlanet({0, 0}, 128, 30000);
   // m_world->spawnDebugBullet({0,-400}, {0, 0});
@@ -129,7 +135,7 @@ void InGameState::debugDraw(sf::RenderTarget& target) const {
       target.draw(sprite);
     }
     // show rotation
-    DebugDraw::rectangle(interpolated.position, {0.5, 16}, {1, 16}, interpolated.rotationDegrees)
+    DebugDraw::rectangle(interpolated.position, {0.5, 16}, {1 * m_viewZoom, 16}, interpolated.rotationDegrees)
         .fill(sf::Color::Red)
         .draw(target);
     // show velocity
@@ -138,7 +144,7 @@ void InGameState::debugDraw(sf::RenderTarget& target) const {
       float mag = math::vector::length(vel);
       DebugDraw::rectangle(interpolated.position,
                            {0, 0.5},
-                           {mag, 1},
+                           {mag, 1 * m_viewZoom},
                            std::atan2(vel.y, vel.x) * 180.f / boost::math::constants::pi<float>())
           .fill(sf::Color::Green)
           .draw(target);

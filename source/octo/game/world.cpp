@@ -11,6 +11,7 @@ World::World() {
   systems.add<systems::Attraction>();
   systems.add<systems::Collision>(*this);
   systems.add<systems::Projectiles>();
+  systems.add<systems::Explosions>();
   systems.add<systems::Physics>(*this);
   systems.add<systems::BoundaryEnforcer>(0);
   systems.add<systems::Debug>();
@@ -30,7 +31,7 @@ void World::addPlanet(sf::Vector2f position, int radius, float mass) {
   planet.assign<components::Planet>();
   // TODO: load planet textures
 
-  planet.assign<components::CollisionMask>(collision::circle(radius, collision::Pixel::Solid));
+  planet.assign<components::CollisionMask>(collision::circle(radius, collision::Pixel::SolidDestructible));
 }
 
 void World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity) {
@@ -42,8 +43,8 @@ void World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity) {
   body->setInertia(1);
   body->setVelocity(velocity);
   bullet.assign<components::Attractable>(1, components::Attractable::PlanetBit);
-  bullet.assign<components::CollisionMask>(collision::circle(4, collision::Pixel::Solid));
-  bullet.assign_from_copy(components::Projectile { 30 });
+  bullet.assign<components::CollisionMask>(collision::circle(4, collision::Pixel::SolidIndestructible));
+  bullet.assign_from_copy(components::Projectile { 50 });
 }
 
 void World::update(float timeStep) {

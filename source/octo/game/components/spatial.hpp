@@ -22,7 +22,7 @@ public:
   /*! \brief Initializes the view.
    *  \param degress a reference to the underlying variable holding the angle in degrees.
    */
-  RadView(T& degrees)
+  explicit RadView(T& degrees)
     : m_degrees(degrees) {}
 
   /*! \brief Assigns an angle in radians.
@@ -82,7 +82,7 @@ public:
    *  \param pos the initial position.
    *  \param rotation the initial rotation in degrees in clockwise order.
    */
-  SpatialSnapshot(sf::Vector2f pos = sf::Vector2f(), float rotation = 0);
+  explicit SpatialSnapshot(sf::Vector2f pos = sf::Vector2f(), float rotation = 0);
 
 
   /*! \brief Returns the entity's rotation in radians in clockwise order.
@@ -104,7 +104,7 @@ public:
 };
 
 struct Spatial : public util::Interpolated<SpatialSnapshot> {
-  Spatial(sf::Vector2f pos = sf::Vector2f(), float rotation = 0);
+  explicit Spatial(sf::Vector2f pos = sf::Vector2f(), float rotation = 0);
 };
 
 // interpolation of SpatialSnapshot values

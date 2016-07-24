@@ -35,11 +35,11 @@ Spatial::Spatial(sf::Vector2f pos, float rotation)
 }
 
 SpatialSnapshot operator*(const SpatialSnapshot& spatial, float alpha) {
-  return {spatial.position * alpha, spatial.rotationDegrees * alpha};
+  return SpatialSnapshot {spatial.position * alpha, spatial.rotationDegrees * alpha};
 }
 
 SpatialSnapshot operator+(const SpatialSnapshot& a, const SpatialSnapshot& b) {
-  return {a.position + b.position, a.rotationDegrees + b.rotationDegrees};
+  return SpatialSnapshot {a.position + b.position, a.rotationDegrees + b.rotationDegrees};
 }
 
 SpatialSnapshot lerp(const SpatialSnapshot& a, const SpatialSnapshot& b, float alpha) {

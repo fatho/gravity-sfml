@@ -32,7 +32,7 @@ private:
   std::unique_ptr<game::World> m_world;
 
   sf::Vector2f m_viewCenter;
-  float m_viewZoom = 1.0f;
+  float m_viewZoom = 1.5f;
 
   float m_physicsStep = 1.f / 100.f;
   float m_timeFactor = 1.f;

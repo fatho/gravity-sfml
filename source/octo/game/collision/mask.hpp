@@ -2,6 +2,8 @@
 
 #include <octo/util/pixelarray.hpp>
 
+#include <array>
+
 namespace octo {
 namespace game {
 namespace collision {
@@ -13,8 +15,10 @@ namespace collision {
 enum class Pixel : sf::Uint8 {
   /// Value for pixels that are not part of the entity
   NoCollision = 0,
-  /// Default value for solid pixels without special properties
-  Solid = 0xFF
+  /// solid, destructible pixels without special properties
+  SolidIndestructible = 0xFE,
+  /// solid, destructible pixels without special properties
+  SolidDestructible = 0xFF,
 };
 
 /*! \brief An 8-bit collision mask representing the shape of the entity.
@@ -25,9 +29,10 @@ enum class Pixel : sf::Uint8 {
  */
 using Mask = util::PixelArray<Pixel>;
 
-Mask circle(size_t radius, Pixel fill = Pixel::Solid);
+Mask circle(size_t radius, Pixel fill);
 
-Mask rectangle(size_t width, size_t height, Pixel fill = Pixel::Solid);
+Mask rectangle(size_t width, size_t height, Pixel fill);
+
 }
 }
 }
