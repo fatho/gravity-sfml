@@ -82,8 +82,8 @@ inline T cross2d(const sf::Vector2<T>& v, const sf::Vector2<T>& w) {
  *  \return the Z component of the cross product of the 3D extension of \p s and \p v.
  */
 template<typename T>
-inline sf::Vector2<T> cross2d(float s, const sf::Vector2<T>& v) {
-  return - s * v.y + s * v.x;
+inline sf::Vector2<T> cross2d(T s, const sf::Vector2<T>& v) {
+  return { - s * v.y, s * v.x };
 }
 
 /*! \brief Computes the cross product of a scalar and a 2D vector.
@@ -98,8 +98,8 @@ inline sf::Vector2<T> cross2d(float s, const sf::Vector2<T>& v) {
  *  \return the Z component of the cross product of the 3D extension of \p s and \p v.
  */
 template<typename T>
-inline sf::Vector2<T> cross2d(const sf::Vector2<T>& v, float s) {
-  return s * v.y - s * v.x;
+inline sf::Vector2<T> cross2d(const sf::Vector2<T>& v, T s) {
+  return { s * v.y, - s * v.x };
 }
 
 /*! \brief Casts both components of a vector.
