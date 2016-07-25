@@ -21,20 +21,28 @@ void Projectiles::update(entityx::EntityManager& es, entityx::EventManager& even
                          entityx::TimeDelta dt) {
   for (auto& hit : m_projectileHits) {
     if (hit.entities[0].valid()) {
+      // TODO put "bounce" code in separate method
       auto spatial = hit.entities[0].component<components::Spatial>();
       auto body = hit.entities[0].component<components::DynamicBody>();
       assert(spatial.valid());
       assert(body.valid());
-      sf::Vector2f lcont = spatial->current().globalToLocal().transformPoint(hit.contactPoint);
-      // FIXME add linear momentum corresponding to angular momentum at contact position
+      sf::Vector2f lcont = spatial->current().globalToLocal(false).transformPoint(hit.contactPoint);
       // FIXME add momentum of other body
-      sf::Vector2f contactMomentum = body->linearMomentum;
+      sf::Vector2f contactMomentum = body->momentumAt(lcont);
       float dir = math::vector::dot(contactMomentum, hit.normals[1]);
+      sf::Vector2f normalMomentum = hit.normals[1] * dir;
+
       if(dir < 0) {
         // only apply impulse when not moving outwards already
-
-        // FIXME the frame of reference of the body is unrotated, but lcont is rotated
-        body->applyLinearImpulse(lcont, - hit.normals[1] * dir * 2.f);
+        sf::Vector2f tangentMomentum = contactMomentum - normalMomentum;
+        float restitution = 0.8f;
+        float friction = 0.1f;
+        body->applyLinearImpulse(lcont, - normalMomentum * (1.f + restitution) - tangentMomentum * friction);
+      }
+      // prevent tunneling through planets
+      float forceDir = math::vector::dot(body->force, hit.normals[1]);
+      if(forceDir < 0) {
+        body->applyForce(lcont, - forceDir * hit.normals[1]);
       }
 
       //triggerProjectile(events, hit.entities[0]);
