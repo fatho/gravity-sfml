@@ -98,9 +98,17 @@ public:
    */
   internal::RadView<float> rotationRadians();
 
-  sf::Transform localToGlobal() const;
+  /*! \brief Returns the transformation from the local coordinate space to global coordinates.
+   *
+   *  \param rotated If true, the returned transformation also takes into account the rotation of the object.
+   */
+  sf::Transform localToGlobal(bool rotated = true) const;
 
-  sf::Transform globalToLocal() const;
+  /*! \brief Returns the transformation from the local coordinate space to global coordinates.
+   *
+   *  \param rotated If true, the returned transformation also takes into account the rotation of the object.
+   */
+  sf::Transform globalToLocal(bool rotated = true) const;
 };
 
 struct Spatial : public util::Interpolated<SpatialSnapshot> {
