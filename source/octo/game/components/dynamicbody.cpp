@@ -73,3 +73,9 @@ void DynamicBody::applyLinearImpulse(const sf::Vector2f& localPosition, const sf
   this->linearMomentum += impulse;
   this->angularMomentum += angularImpulse;
 }
+
+sf::Vector2f DynamicBody::momentumAt(const sf::Vector2f& localPosition) {
+  sf::Vector2f r = localPosition - centerOfMass;
+
+  return this->linearMomentum + math::vector::cross2d(this->angularMomentum, r) / math::vector::lengthSquared(r);
+}

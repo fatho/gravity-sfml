@@ -132,7 +132,7 @@ public:
    */
   void applyLinearImpulse(const sf::Vector2f& localPosition, const sf::Vector2f& impulse);
 
-  sf::Vector2f impulseAt(const sf::Vector2f& localPosition);
+  sf::Vector2f momentumAt(const sf::Vector2f& localPosition);
 };
 
 }
