@@ -3,6 +3,8 @@
 #include <octo/game/collision/mask.hpp>
 #include <octo/math/vector.hpp>
 
+#include <SFML/Config.hpp>
+
 namespace octo {
 namespace game {
 namespace components {
@@ -16,6 +18,12 @@ struct CollisionMask {
   /*! \brief The position of the collision masks center in the entities local coordinate system.
    */
   sf::Vector2f anchor;
+  /*! \brief The collision selector mask, used to prevent certain entities from colliding.
+   *
+   *  Only if the two overlapping collision masks have at least one common bit set in
+   *  their selectors, the entities actually collide.
+   */
+  sf::Uint64 selector = 0xFFFFFFFFFFFFFFFFUL;
 
   sf::Vector2f size() const {
     return math::vector::vector_cast<float>(mask.size());

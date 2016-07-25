@@ -17,15 +17,15 @@ internal::RadView<float> SpatialSnapshot::rotationRadians() {
 
 sf::Transform SpatialSnapshot::localToGlobal() const {
   sf::Transform t;
-  t.rotate(this->rotationDegrees);     // ... -> local rotated A
   t.translate(this->position);         // ... -> global
+  t.rotate(this->rotationDegrees);     // ... -> local rotated A
   return t;
 }
 
 sf::Transform SpatialSnapshot::globalToLocal() const {
   sf::Transform t;
-  t.translate(-this->position);         // ... -> local rotated A
   t.rotate(-this->rotationDegrees);     // ... -> local
+  t.translate(-this->position);         // ... -> local rotated A
   return t;
 }
 

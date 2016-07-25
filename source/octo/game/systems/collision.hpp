@@ -19,6 +19,7 @@ struct Collision : public entityx::System<Collision> {
 private:
   fmtlog::Log log = fmtlog::For<Collision>();
   World& m_world;
+  int m_normalAccuracy = 3;
 };
 
 }

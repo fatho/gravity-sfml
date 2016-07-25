@@ -4,6 +4,7 @@
 #include "../events/explode.hpp"
 
 #include <algorithm>
+#include <cassert>
 #include <functional>
 
 namespace octo {
@@ -19,19 +20,35 @@ void Projectiles::configure(entityx::EventManager& events) {
 void Projectiles::update(entityx::EntityManager& es, entityx::EventManager& events,
                          entityx::TimeDelta dt) {
   for (auto& hit : m_projectileHits) {
-    if (hit.entity[0].valid()) {
-      triggerProjectile(events, hit.entity[0]);
+    if (hit.entities[0].valid()) {
+      auto spatial = hit.entities[0].component<components::Spatial>();
+      auto body = hit.entities[0].component<components::DynamicBody>();
+      assert(spatial.valid());
+      assert(body.valid());
+      sf::Vector2f lcont = spatial->current().globalToLocal().transformPoint(hit.contactPoint);
+      // FIXME add linear momentum corresponding to angular momentum at contact position
+      // FIXME add momentum of other body
+      sf::Vector2f contactMomentum = body->linearMomentum;
+      float dir = math::vector::dot(contactMomentum, hit.normals[1]);
+      if(dir < 0) {
+        // only apply impulse when not moving outwards already
 
-      // TODO apply direct damage to `hit.entity[1]` (due to being hit)
+        // FIXME the frame of reference of the body is unrotated, but lcont is rotated
+        body->applyLinearImpulse(lcont, - hit.normals[1] * dir * 2.f);
+      }
+
+      //triggerProjectile(events, hit.entities[0]);
+
+      // TODO apply direct damage to `hit.entities[1]` (due to being hit)
 
       // destroy the projectile
-      hit.entity[0].destroy();
+      //hit.entities[0].destroy();
     }
   }
   m_projectileHits.clear();
 
   for (auto& coll : m_projectileCollisions) {
-    for (auto& e : coll.entity) {
+    for (auto& e : coll.entities) {
       if (e.valid()) {
         triggerProjectile(events, e);
         e.destroy();
@@ -43,7 +60,7 @@ void Projectiles::update(entityx::EntityManager& es, entityx::EventManager& even
 
 void Projectiles::receive(const events::EntityCollision& event) {
   bool isProjectile[2];
-  std::transform(begin(event.entity), end(event.entity), isProjectile, Projectiles::isProjectile);
+  std::transform(begin(event.entities), end(event.entities), isProjectile, Projectiles::isProjectile);
   // only care for collisions if at least one of the entities is a projectile
   if (isProjectile[0] && isProjectile[1]) {
     m_projectileCollisions.push_back(event);

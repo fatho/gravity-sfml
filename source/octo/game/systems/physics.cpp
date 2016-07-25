@@ -1,8 +1,7 @@
 #include "physics.hpp"
 
 #include "../components.hpp"
-#include <octo/math/rect.hpp>
-#include <octo/math/vector.hpp>
+#include <octo/math/all.hpp>
 
 #include <cmath>
 
@@ -17,13 +16,19 @@ void Physics::update(entityx::EntityManager& es, entityx::EventManager&, entityx
 
 void Physics::integrate(entityx::EntityManager& es, float timeStep) {
   using namespace components;
-  es.each<Spatial, DynamicBody>([timeStep](entityx::Entity, Spatial& spatial, DynamicBody& body) {
+  es.each<Spatial, DynamicBody>([this, timeStep](entityx::Entity entity, Spatial& spatial, DynamicBody& body) {
     spatial.previous() = spatial.current();
     // using semi-implicit Euler
 
     // integrate linear motion
     body.linearMomentum += body.force * timeStep;
-    spatial.current().position += body.velocity() * timeStep;
+    sf::Vector2f displacement = body.velocity() * timeStep;
+    // FIXME maybe put an upper limit to velocities, to prevent
+    // if(math::vector::lengthSquared(displacement) >= math::util::sqr(m_maximumSpeed)) {
+    //   displacement = math::vector::normalized(displacement) * m_maximumSpeed;
+    //   log.debug("object too fast [%s]", entity.id());
+    // }
+    spatial.current().position += displacement;
 
     // integrate angular motion
     body.angularMomentum += body.torque * timeStep;

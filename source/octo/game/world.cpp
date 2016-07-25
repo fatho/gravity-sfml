@@ -20,7 +20,7 @@ World::World() {
   setClipRadius(1000); // depends on m_boundaryEnforcer
 }
 
-void World::addPlanet(sf::Vector2f position, int radius, float mass) {
+entityx::Entity World::addPlanet(sf::Vector2f position, int radius, float mass) {
   entityx::Entity planet = entities.create();
 
   planet.assign<components::Spatial>(position);
@@ -32,19 +32,22 @@ void World::addPlanet(sf::Vector2f position, int radius, float mass) {
   // TODO: load planet textures
 
   planet.assign<components::CollisionMask>(collision::circle(radius, collision::Pixel::SolidDestructible));
+  return planet;
 }
 
-void World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity) {
+entityx::Entity World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity) {
   entityx::Entity bullet = entities.create();
 
   bullet.assign<components::Spatial>(position);
   auto body = bullet.assign<components::DynamicBody>();
   body->setMass(1);
-  body->setInertia(1);
+  body->setInertia(100);
   body->setVelocity(velocity);
   bullet.assign<components::Attractable>(1, components::Attractable::PlanetBit);
   bullet.assign<components::CollisionMask>(collision::circle(4, collision::Pixel::SolidIndestructible));
+  //bullet.assign<components::CollisionMask>(collision::rectangle(8, 20, collision::Pixel::SolidIndestructible));
   bullet.assign_from_copy(components::Projectile { 50 });
+  return bullet;
 }
 
 void World::update(float timeStep) {

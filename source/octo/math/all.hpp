@@ -1,4 +1,5 @@
 #pragma once
 
-#include "vector.hpp"
 #include "rect.hpp"
+#include "util.hpp"
+#include "vector.hpp"

@@ -131,6 +131,8 @@ public:
    *  \param impulse the linear impulse that is applied.
    */
   void applyLinearImpulse(const sf::Vector2f& localPosition, const sf::Vector2f& impulse);
+
+  sf::Vector2f impulseAt(const sf::Vector2f& localPosition);
 };
 
 }

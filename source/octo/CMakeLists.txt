@@ -18,6 +18,7 @@ set(SOURCES
   content/shader.cpp
   game/world.cpp
   game/collision/mask.cpp
+  game/collision/util.cpp
   game/components/attraction.cpp
   game/components/collisionmask.cpp
   game/components/dynamicbody.cpp

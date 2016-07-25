@@ -125,6 +125,12 @@ inline auto map(const sf::Vector2<T>& v, MapFn fn) -> sf::Vector2<decltype(fn(v.
   return { fn(v.x), fn(v.y) };
 }
 
+inline sf::Vector2f rotate(float radians, const sf::Vector2f& v) {
+  float c = std::cos(radians);
+  float s = std::sin(radians);
+  return { c * v.x - s * v.y, s * v.x + c * v.y };
+}
+
 }
 }
 }

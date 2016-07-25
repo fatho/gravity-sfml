@@ -29,6 +29,16 @@ enum class Pixel : sf::Uint8 {
  */
 using Mask = util::PixelArray<Pixel>;
 
+// some accessors to facilitate later changes in representation
+
+inline bool isSolid(Pixel pix) {
+  return pix != Pixel::NoCollision;
+}
+
+inline bool isDestructible(Pixel pix) {
+  return pix == Pixel::SolidDestructible;
+}
+
 Mask circle(size_t radius, Pixel fill);
 
 Mask rectangle(size_t width, size_t height, Pixel fill);

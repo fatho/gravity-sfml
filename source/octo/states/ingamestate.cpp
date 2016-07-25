@@ -5,6 +5,7 @@
 #include "../rendering/debugdraw.hpp"
 #include <octo/math/all.hpp>
 #include <octo/game/collision/mask.hpp>
+#include <octo/game/collision/util.hpp>
 
 #include <cmath>
 #include <iostream>
@@ -28,6 +29,7 @@ InGameState::InGameState() {
     sf::Vector2f dir { std::cos(rad), std::sin(rad) };
     m_world->spawnDebugBullet(sf::Vector2f {-320, -320} + dir * 15.f, dir * 120.f);
   }
+  m_paused = true;
 
   // m_world->addPlanet({0, 0}, 128, 30000);
   // m_world->spawnDebugBullet({0,-400}, {0, 0});

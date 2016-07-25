@@ -16,9 +16,9 @@ class World : public entityx::EntityX {
 public:
   World();
 
-  void addPlanet(sf::Vector2f position, int radius, float mass);
+  entityx::Entity addPlanet(sf::Vector2f position, int radius, float mass);
 
-  void spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity);
+  entityx::Entity spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity);
 
   void update(float timeStep);
 
