@@ -11,11 +11,12 @@ namespace events {
  */
 struct Explode {
   sf::Vector2f center;
-  float radius;
+  float destructionRadius;
+  float damageRadius;
   float force;
   float damage;
 
-  Explode(const sf::Vector2f& center, float radius, float force, float damage);
+  Explode(const sf::Vector2f& center, float destructionRadius, float damageRadius, float force, float damage);
 };
 
 }

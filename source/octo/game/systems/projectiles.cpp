@@ -67,11 +67,11 @@ void Projectiles::triggerProjectile(entityx::EventManager& events,
                                     entityx::Entity projectileEntity) {
   auto spatial = projectileEntity.component<components::Spatial>();
   auto projectile = projectileEntity.component<components::Projectile>();
-  if (spatial && projectile) {
   if (spatial.valid() && projectile.valid()) {
     log.debug("triggering projectile %s", projectileEntity);
     // TODO replace with scriptable effects
-    events.emit<events::Explode>(spatial->current().position, projectile->explosionRadius, 1, 1);
+    events.emit<events::Explode>(spatial->current().position, projectile->explosionRadius,
+                                 projectile->explosionRadius * 1.5, 100, 1);
     projectile->bounceCounter += 1;
     if(projectile->bounceCounter > 3) {
       projectileEntity.destroy();
