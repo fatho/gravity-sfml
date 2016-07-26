@@ -34,48 +34,57 @@ void DynamicBody::setInertia(float newinertia) {
   }
 }
 
-void DynamicBody::applyForce(const sf::Vector2f& localPosition, const sf::Vector2f& appliedForce) {
-  sf::Vector2f r = localPosition - centerOfMass;
+void DynamicBody::applyForce(const sf::Vector2f& localPosition, const sf::Vector2f& appliedForce,
+                             bool wakeUp) {
+  if (!sleeping || wakeUp) {
+    this->sleeping = false;
+    sf::Vector2f r = localPosition - centerOfMass;
 
-  float generatedTorque = math::vector::cross2d(r,  appliedForce);;
+    float generatedTorque = math::vector::cross2d(r, appliedForce);
 
-  fmtlog::Log(fmtlog::For<DynamicBody>())
-      .debug("apply force {%f, %f} to {%f, %f}; r: {%f, %f} torque: %f",
-             appliedForce.x,
-             force.y,
-             localPosition.x,
-             localPosition.y,
-             r.x,
-             r.y,
-             generatedTorque);
+    fmtlog::Log(fmtlog::For<DynamicBody>())
+        .debug("apply force {%f, %f} to {%f, %f}; r: {%f, %f} torque: %f",
+               appliedForce.x,
+               force.y,
+               localPosition.x,
+               localPosition.y,
+               r.x,
+               r.y,
+               generatedTorque);
 
-  // update force & torque
-  this->force += appliedForce;
-  this->torque += generatedTorque;
+    // update force & torque
+    this->force += appliedForce;
+    this->torque += generatedTorque;
+  }
 }
 
-void DynamicBody::applyLinearImpulse(const sf::Vector2f& localPosition, const sf::Vector2f& impulse) {
-  sf::Vector2f r = localPosition - centerOfMass;
+void DynamicBody::applyLinearImpulse(const sf::Vector2f& localPosition, const sf::Vector2f& impulse,
+                                     bool wakeUp) {
+  if (!sleeping || wakeUp) {
+    this->sleeping = false;
+    sf::Vector2f r = localPosition - centerOfMass;
 
-  float angularImpulse = math::vector::cross2d(r, impulse);
+    float angularImpulse = math::vector::cross2d(r, impulse);
 
-  fmtlog::Log(fmtlog::For<DynamicBody>())
-    .debug("apply impulse {%f, %f} to {%f, %f}; r: {%f, %f} angular impulse: %f",
-           impulse.x,
-           impulse.y,
-           localPosition.x,
-           localPosition.y,
-           r.x,
-           r.y,
-           angularImpulse);
+    fmtlog::Log(fmtlog::For<DynamicBody>())
+        .debug("apply impulse {%f, %f} to {%f, %f}; r: {%f, %f} angular impulse: %f",
+               impulse.x,
+               impulse.y,
+               localPosition.x,
+               localPosition.y,
+               r.x,
+               r.y,
+               angularImpulse);
 
-  // update force & torque
-  this->linearMomentum += impulse;
-  this->angularMomentum += angularImpulse;
+    // update force & torque
+    this->linearMomentum += impulse;
+    this->angularMomentum += angularImpulse;
+  }
 }
 
 sf::Vector2f DynamicBody::momentumAt(const sf::Vector2f& localPosition) {
   sf::Vector2f r = localPosition - centerOfMass;
 
-  return this->linearMomentum + math::vector::cross2d(this->angularMomentum, r) / math::vector::lengthSquared(r);
+  return this->linearMomentum +
+         math::vector::cross2d(this->angularMomentum, r) / math::vector::lengthSquared(r);
 }

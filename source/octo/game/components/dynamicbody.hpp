@@ -54,11 +54,18 @@ public:
   /*! \brief The bodies inertia w.r.t. the only rotation axis in 2D space.
    */
   float inertia = 0;
+
   /*! \brief The bodies inverse inertia.
    *
    *  Mainly useful when having a body with an infinite mass or with a fixed rotation.
    */
   float inverseInertia = 0;
+
+  /*! \brief When a body is sleeping, it will not be affected forces and won't move.
+   *
+   *  \remark A sleeping body retains its momentum.
+   */
+  bool sleeping = false;
 
 public:
   //////////////////////////////////////////////////////////////////////////////
@@ -120,7 +127,7 @@ public:
    *  \param localPosition the point of the body in local coordinates the force is applied to.
    *  \param force the force that is applied.
    */
-  void applyForce(const sf::Vector2f& localPosition, const sf::Vector2f& force);
+  void applyForce(const sf::Vector2f& localPosition, const sf::Vector2f& force, bool wakeUp = true);
 
   /*! \brief Applies a linear impulse at a specific point of the body.
    *
@@ -130,7 +137,7 @@ public:
    *  \param localPosition the point of the body in local coordinates the impulse is applied to.
    *  \param impulse the linear impulse that is applied.
    */
-  void applyLinearImpulse(const sf::Vector2f& localPosition, const sf::Vector2f& impulse);
+  void applyLinearImpulse(const sf::Vector2f& localPosition, const sf::Vector2f& impulse, bool wakeUp = true);
 
   sf::Vector2f momentumAt(const sf::Vector2f& localPosition);
 };
