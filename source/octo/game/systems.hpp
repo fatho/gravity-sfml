@@ -5,5 +5,6 @@
 #include "systems/collision.hpp"
 #include "systems/debug.hpp"
 #include "systems/explosions.hpp"
+#include "systems/healthsystem.hpp"
 #include "systems/physics.hpp"
 #include "systems/projectiles.hpp"

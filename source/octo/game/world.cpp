@@ -12,6 +12,7 @@ World::World() {
   systems.add<systems::Collision>(*this);
   systems.add<systems::Projectiles>();
   systems.add<systems::Explosions>();
+  systems.add<systems::HealthSystem>();
   systems.add<systems::Physics>(*this);
   systems.add<systems::BoundaryEnforcer>(0);
   systems.add<systems::Debug>();
@@ -45,7 +46,6 @@ entityx::Entity World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velo
   body->setVelocity(velocity);
   bullet.assign<components::Attractable>(1, components::Attractable::PlanetBit);
   bullet.assign<components::CollisionMask>(collision::circle(4, collision::Pixel::SolidIndestructible));
-  //bullet.assign<components::CollisionMask>(collision::rectangle(8, 20, collision::Pixel::SolidIndestructible));
   bullet.assign_from_copy(components::Projectile { 50 });
   return bullet;
 }

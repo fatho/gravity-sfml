@@ -22,10 +22,13 @@ set(SOURCES
   game/components/attraction.cpp
   game/components/collisionmask.cpp
   game/components/dynamicbody.cpp
+  game/components/health.cpp
   game/components/planet.cpp
   game/components/projectile.cpp
   game/components/spatial.cpp
+  game/components/vessel.cpp
   game/events/componentmodified.cpp
+  game/events/damage.cpp
   game/events/entitycollision.cpp
   game/events/explode.cpp
   game/systems/attractionsystem.cpp
@@ -33,6 +36,7 @@ set(SOURCES
   game/systems/collision.cpp
   game/systems/debug.cpp
   game/systems/explosions.cpp
+  game/systems/healthsystem.cpp
   game/systems/physics.cpp
   game/systems/projectiles.cpp
   rendering/debugdraw.cpp
