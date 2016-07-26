@@ -10,6 +10,7 @@ namespace components {
  */
 struct Projectile {
   float explosionRadius;
+  int bounceCounter = 0;
 };
 
 }

@@ -131,6 +131,11 @@ inline sf::Vector2f rotate(float radians, const sf::Vector2f& v) {
   return { c * v.x - s * v.y, s * v.x + c * v.y };
 }
 
+template<typename T>
+bool isFinite(const sf::Vector2<T>& v) {
+  return std::isfinite(v.x) && std::isfinite(v.y);
+}
+
 }
 }
 }

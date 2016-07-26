@@ -2,7 +2,9 @@
 
 #include "../components/spatial.hpp"
 #include "../components/dynamicbody.hpp"
+#include "../events/entitycollision.hpp"
 #include "../world.hpp"
+
 #include <fmtlog/fmtlog.hpp>
 
 #include <entityx/entityx.h>
@@ -15,6 +17,10 @@ struct Collision : public entityx::System<Collision> {
   Collision(World& world);
 
   void update(entityx::EntityManager& es, entityx::EventManager& events, entityx::TimeDelta dt) override;
+
+private:
+
+  void bounce(events::EntityCollision& collisionData);
 
 private:
   fmtlog::Log log = fmtlog::For<Collision>();
