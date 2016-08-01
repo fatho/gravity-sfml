@@ -55,8 +55,7 @@ void Collision::update(entityx::EntityManager& es, entityx::EventManager& events
           }
           // if there was a collision, compute contact
           if (numContacts > 0) {
-            contactPoint /= (float)numContacts;
-            // TODO: compute collision normal
+            contactPoint /= static_cast<float>(numContacts);
             sf::Vector2f contactA =
                 collision::globalToMask(spatialA.current(), maskA).transformPoint(contactPoint);
             sf::Vector2f contactB =
@@ -111,7 +110,7 @@ void Collision::bounce(events::EntityCollision& colData) {
     return;
   }
   for (int cur = 0; cur <= 1; ++cur) {
-    int other = (cur + 1) & 1;
+    int other = 1 - cur;
     if (spatials[cur].valid() && bodies[cur].valid()) {
       float dir = math::vector::dot(contactMomentum, colData.normals[other]);
       sf::Vector2f normalMomentum = colData.normals[other] * dir;
