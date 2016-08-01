@@ -50,6 +50,20 @@ entityx::Entity World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velo
   return bullet;
 }
 
+entityx::Entity World::spawnVessel(sf::Vector2f position, float rotation) {
+  entityx::Entity vessel = entities.create();
+
+  auto pos = vessel.assign<components::Spatial>(position);
+  pos->current().rotationDegrees = rotation;
+  auto body = vessel.assign<components::DynamicBody>();
+  body->setMass(1);
+  body->setInertia(1000);
+  vessel.assign<components::Attractable>(1, components::Attractable::PlanetBit);
+  vessel.assign<components::CollisionMask>(collision::ellipse(32, 24, collision::Pixel::SolidIndestructible));
+  vessel.assign_from_copy(components::Vessel { });
+  return vessel;
+}
+
 void World::update(float timeStep) {
   systems.update_all(timeStep);
   m_updateCount += 1;

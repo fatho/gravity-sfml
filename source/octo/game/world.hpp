@@ -20,6 +20,8 @@ public:
 
   entityx::Entity spawnDebugBullet(sf::Vector2f position, sf::Vector2f velocity);
 
+  entityx::Entity spawnVessel(sf::Vector2f position, float rotation);
+
   void update(float timeStep);
 
   // accessors

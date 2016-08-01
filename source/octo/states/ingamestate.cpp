@@ -23,6 +23,7 @@ InGameState::InGameState() {
 
   m_world->addPlanet({300, 200}, 128, 30000);
   m_world->addPlanet({-150, -200}, 128, 30000);
+  m_world->addPlanet({150, -200}, 22, 3000);
 
   for(float angle = 0; angle < 360; angle += 36) {
     float rad = angle / 180.f * boost::math::constants::pi<float>();
@@ -30,6 +31,9 @@ InGameState::InGameState() {
     m_world->spawnDebugBullet(sf::Vector2f {-320, -320} + dir * 15.f, dir * 120.f);
   }
   m_paused = true;
+
+  m_world->spawnVessel({450, 250}, 180);
+  //auto b = m_world->spawnDebugBullet({300, 60}, {0, 0});
 
   // m_world->addPlanet({0, 0}, 128, 30000);
   // m_world->spawnDebugBullet({0,-400}, {0, 0});
