@@ -43,6 +43,8 @@ Mask circle(size_t radius, Pixel fill);
 
 Mask rectangle(size_t width, size_t height, Pixel fill);
 
+Mask ellipse(size_t width, size_t height, Pixel fill);
+
 }
 }
 }
