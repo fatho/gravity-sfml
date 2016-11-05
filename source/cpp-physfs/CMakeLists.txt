@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 project(cpp-physfs)
 
-find_package(Boost 1.60 REQUIRED filesystem)
+find_package(Boost 1.62 REQUIRED filesystem system)
 find_package(PhysFS REQUIRED)
-find_package(SFML 2.3 COMPONENTS system)
+find_package(SFML 2.4 REQUIRED COMPONENTS system)
 
 set(SOURCES
   physfs.cpp)

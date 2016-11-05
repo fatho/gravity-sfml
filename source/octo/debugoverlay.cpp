@@ -17,7 +17,7 @@ void DebugOverlay::draw(sf::RenderTarget& target) {
     fpsText.setFont(m_font->content());
     fpsText.setCharacterSize(16);
     fpsText.setString((boost::format("FPS: %.1f") % m_fps.fps()).str());
-    fpsText.setColor(sf::Color::White);
+    fpsText.setFillColor(sf::Color::White);
     fpsText.setPosition(5, 5);
     target.draw(fpsText);
   }

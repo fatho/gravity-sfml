@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(gravity-octo)
 
-find_package(Boost 1.60 REQUIRED filesystem)
-find_package(SFML 2.3 COMPONENTS graphics window audio system)
+find_package(Boost 1.62 REQUIRED filesystem system)
+find_package(SFML 2.4 REQUIRED COMPONENTS graphics window audio system)
 find_package(EntityX REQUIRED)
 
 set(SOURCES

@@ -4,7 +4,7 @@ project(fmtlog)
 set(SOURCES
   fmtlog.cpp)
 
-find_package(Boost 1.60 REQUIRED)
+find_package(Boost 1.62 REQUIRED)
 
 add_library(fmtlog ${SOURCES})
 target_include_directories(fmtlog PRIVATE ${Boost_INCLUDE_DIRS})

@@ -14,14 +14,7 @@
 #include <SFML/System/InputStream.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/iostreams/categories.hpp>
-
-// hack to silence annoying deprecation warnings in the innards of boost
-#undef __GNUC__
-
 #include <boost/iostreams/stream.hpp>
-
-// undo hack
-#define __GNUC__
 
 /*! \brief Namespace containing a modern C++ interface to PhysFS.
  */
