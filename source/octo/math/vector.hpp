@@ -136,6 +136,10 @@ bool isFinite(const sf::Vector2<T>& v) {
   return std::isfinite(v.x) && std::isfinite(v.y);
 }
 
+inline sf::Vector2f unitAngleTrig(float angleRad) {
+  return sf::Vector2f(std::cos(angleRad), std::sin(angleRad));
+}
+
 }
 }
 }

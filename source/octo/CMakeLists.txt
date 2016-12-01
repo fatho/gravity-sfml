@@ -73,6 +73,8 @@ set(SOURCES
   game/components/dynamicbody.hpp
   game/components/health.cpp
   game/components/health.hpp
+  game/components/material.cpp
+  game/components/material.hpp
   game/components/planet.cpp
   game/components/planet.hpp
   game/components/projectile.cpp

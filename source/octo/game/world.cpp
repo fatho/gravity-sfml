@@ -34,6 +34,7 @@ entityx::Entity World::addPlanet(sf::Vector2f position, int radius, float mass) 
   planet.assign<components::Planet>();
 
   planet.assign<components::CollisionMask>(collision::circle(radius, collision::Pixel::SolidDestructible));
+  planet.assign<components::Material>(0.7f, 0.2f);
   return planet;
 }
 
@@ -48,6 +49,7 @@ entityx::Entity World::spawnDebugBullet(sf::Vector2f position, sf::Vector2f velo
   bullet.assign<components::Attractable>(1, components::Attractable::PlanetBit);
   bullet.assign<components::CollisionMask>(collision::circle(4, collision::Pixel::SolidIndestructible));
   bullet.assign_from_copy(components::Projectile { 50 });
+  bullet.assign<components::Material>(0.8f, 0.1f);
   return bullet;
 }
 
@@ -62,6 +64,7 @@ entityx::Entity World::spawnVessel(sf::Vector2f position, float rotation) {
   vessel.assign<components::Attractable>(1, components::Attractable::PlanetBit);
   vessel.assign<components::CollisionMask>(collision::ellipse(32, 24, collision::Pixel::SolidIndestructible));
   vessel.assign_from_copy(components::Vessel { });
+  vessel.assign<components::Material>(0.7f, 0.2f);
   return vessel;
 }
 
