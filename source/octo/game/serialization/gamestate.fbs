@@ -1,0 +1,26 @@
+namespace octo.game.serialization;
+
+struct Vec2 {
+  x : float;
+  y : float;
+}
+
+table CollisionMask {
+  width : int;
+  height : int;
+  data : [ubyte];
+}
+
+table Planet {
+  pos : Vec2;
+  initialTerrain : CollisionMask;
+  currentTerrain : CollisionMask;
+  foregroundTexture : string;
+  backgroundTexture : string;
+}
+
+table GameState {
+  planets : [Planet];
+}
+
+root_type GameState;
