@@ -78,8 +78,11 @@ void Collision::update(entityx::EntityManager& es, entityx::EventManager& events
                 normalB.y);
             events::EntityCollision collisionData(
                 {entityA, entityB}, {normalA, normalB}, contactPoint);
-            if (!maskA.sensor && !maskB.sensor) {
-              bounce(collisionData);
+            std::array<entityx::ComponentHandle<components::Material>, 2> materials = {
+                entityA.component<components::Material>(),
+                entityB.component<components::Material>()};
+            if (std::all_of(begin(materials), end(materials), [](auto x) { return x; })) {
+              bounce(collisionData, materials);
             }
             events.emit(collisionData);
           }
@@ -89,7 +92,8 @@ void Collision::update(entityx::EntityManager& es, entityx::EventManager& events
   });
 }
 
-void Collision::bounce(events::EntityCollision& colData) {
+void Collision::bounce(events::EntityCollision& colData,
+                       std::array<entityx::ComponentHandle<components::Material>, 2>& materials) {
   std::array<entityx::ComponentHandle<components::Spatial>, 2> spatials;
   std::array<entityx::ComponentHandle<components::DynamicBody>, 2> bodies;
   std::array<sf::Vector2f, 2> lcont;
@@ -118,8 +122,8 @@ void Collision::bounce(events::EntityCollision& colData) {
       if (dir < 0) {
         // only apply impulse when not moving outwards already
         sf::Vector2f tangentMomentum = contactMomentum - normalMomentum;
-        float restitution = 0.8f;
-        float friction = 0.1f;
+        const float restitution = std::max(materials[cur]->restitution, materials[other]->restitution);
+        const float friction = std::sqrt(materials[cur]->friction * materials[other]->friction);
         bodies[cur]->applyLinearImpulse(lcont[cur],
                                         -normalMomentum * (1.f + restitution) /
                                                 static_cast<float>(divisor) -

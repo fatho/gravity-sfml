@@ -25,10 +25,6 @@ struct CollisionMask {
    */
   sf::Uint64 selector = 0xFFFFFFFFFFFFFFFFUL;
 
-  /*! \brief A sensor collision mask only reports collisions, but does not "bounce".
-   */
-  bool sensor = false;
-
   sf::Vector2f size() const {
     return math::vector::vector_cast<float>(mask.size());
   }

@@ -2,6 +2,7 @@
 
 #include "../components/spatial.hpp"
 #include "../components/dynamicbody.hpp"
+#include "../components/material.hpp"
 #include "../events/entitycollision.hpp"
 #include "../world.hpp"
 
@@ -20,7 +21,8 @@ struct Collision : public entityx::System<Collision> {
 
 private:
 
-  void bounce(events::EntityCollision& collisionData);
+  void bounce(events::EntityCollision& collisionData,
+              std::array<entityx::ComponentHandle<components::Material>, 2>& materials);
 
 private:
   fmtlog::Log log = fmtlog::For<Collision>();

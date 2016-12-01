@@ -23,6 +23,7 @@ set(SOURCES
   game/components/collisionmask.cpp
   game/components/dynamicbody.cpp
   game/components/health.cpp
+  game/components/material.cpp
   game/components/planet.cpp
   game/components/projectile.cpp
   game/components/spatial.cpp

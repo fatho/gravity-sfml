@@ -7,6 +7,8 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <entityx/entityx.h>
 
+#include <algorithm>
+
 namespace octo {
 namespace game {
 namespace collision {
@@ -77,6 +79,51 @@ sf::Vector2f computeNormal(const Mask& mask, int accuracy, size_t x, size_t y);
 
 sf::Vector2f computeNormal(const Mask& mask, int accuracy, const sf::Vector2f& point);
 
+template <typename Callback>
+sf::Vector2f bresenhamLine(sf::Vector2f& start, sf::Vector2f& end, Callback callback) {
+  const bool steep = (std::fabs(end.y - start.y) > std::fabs(end.x - start.x));
+  if (steep) {
+    std::swap(start.x, start.y);
+    std::swap(end.x, end.y);
+  }
+
+  if (start.x > end.x) {
+    std::swap(start.x, end.x);
+    std::swap(start.y, end.y);
+  }
+
+  const float dx = end.x - start.x;
+  const float dy = fabs(end.y - start.y);
+
+  float error = dx / 2.0f;
+  const int ystep = (start.y < end.y) ? 1 : -1;
+  int y = static_cast<int>(start.y);
+
+  const int maxX = static_cast<int>(end.x);
+
+  sf::Vector2f cur;
+
+  for (int x = static_cast<int>(start.x); x < maxX; x++) {
+    bool ret;
+    if (steep) {
+      cur = { static_cast<float>(y), static_cast<float>(x) };
+      ret = callback(y, x);
+    } else {
+      cur = { static_cast<float>(x), static_cast<float>(y) };
+      ret = callback(x, y);
+    }
+    if(! ret) {
+      return cur;
+    }
+
+    error -= dy;
+    if (error < 0) {
+      y += ystep;
+      error += dx;
+    }
+  }
+  return cur;
+}
 }
 }
 }
