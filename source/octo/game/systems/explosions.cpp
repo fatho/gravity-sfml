@@ -32,42 +32,46 @@ void Explosions::update(entityx::EntityManager& es, entityx::EventManager& event
     float destructionRadiusSq = math::util::sqr(explosion.destructionRadius);
     collision::aabbQuery(
         es, aabb, [&](entityx::Entity hit, const collision::AabbQueryData& result) {
-          log.debug("explosion hit [%s]", hit.id());
-          // transform explosion center to local coordinates once
-          sf::Vector2f localExplosionCenter = result.globalToMask.transformPoint(explosion.center);
-          bool maskChanged = false;
-          for (auto& pos : util::rectRange(result.intersectionMask)) {
-            // the previous transform involved no scaling
-            if (math::vector::lengthSquared(localExplosionCenter -
-                                            math::vector::vector_cast<float>(pos))
-                <= destructionRadiusSq) {
-              if(result.collisionComponent.mask.at(pos.x, pos.y) == collision::Pixel::SolidDestructible) {
-                result.collisionComponent.mask.at(pos.x, pos.y) = collision::Pixel::NoCollision;
-                maskChanged = true;
+          if(hit != explosion.origin) {
+            log.debug("explosion hit (AABB) candidate [%s]", hit.id());
+            // transform explosion center to local coordinates once
+            sf::Vector2f localExplosionCenter = result.globalToMask.transformPoint(explosion.center);
+            // apply destruction
+            bool maskChanged = false;
+            for (auto& pos : util::rectRange(result.intersectionMask)) {
+              // the previous transform involved no scaling
+              if (math::vector::lengthSquared(localExplosionCenter -
+                                              math::vector::vector_cast<float>(pos))
+                  <= destructionRadiusSq) {
+                if(result.collisionComponent.mask.at(pos.x, pos.y) == collision::Pixel::SolidDestructible) {
+                  result.collisionComponent.mask.at(pos.x, pos.y) = collision::Pixel::NoCollision;
+                  maskChanged = true;
+                }
               }
             }
-          }
-          if(maskChanged) {
-            events.emit<events::ComponentModified<components::CollisionMask>>(hit);
-          }
-          // TODO maybe make range for applying force larger
-          auto body = hit.component<components::DynamicBody>();
-          if(body.valid()) {
-            sf::Vector2f r = result.spatialComponent.current().position - explosion.center;
-            float lenSq = math::vector::lengthSquared(r);
-            if(lenSq < math::util::sqr(explosion.damageRadius)) {
-              float len = std::sqrt(lenSq);
-              float fscale = 1 - std::sqrt(lenSq) / explosion.damageRadius;
-              sf::Vector2f forceDir = r / std::max(1.f, len);
-              // close enough to apply damage and impulse
-              sf::Vector2f impulse = forceDir * explosion.force * fscale;
-              body->linearMomentum += impulse;
-              log.debug("applying explosive force %.1f %.1f", impulse.x, impulse.y);
-              events.emit(events::Damage { hit, fscale * explosion.damage });
+            if(maskChanged) {
+              log.debug("explosion destroyed terrain [%s]", hit.id());
+              events.emit<events::ComponentModified<components::CollisionMask>>(hit);
             }
-          }
+            // TODO maybe make range for applying force larger
+            auto body = hit.component<components::DynamicBody>();
+            if(body.valid()) {
+              sf::Vector2f r = result.spatialComponent.current().position - explosion.center;
+              float lenSq = math::vector::lengthSquared(r);
+              if(lenSq < math::util::sqr(explosion.damageRadius)) {
+                float len = std::sqrt(lenSq);
+                float fscale = 1 - std::sqrt(lenSq) / explosion.damageRadius;
+                sf::Vector2f forceDir = r / std::max(.5f, len);
+                // close enough to apply damage and impulse
+                sf::Vector2f impulse = forceDir * explosion.force * fscale;
+                body->linearMomentum += impulse;
+                log.debug("applying explosive force %.1f %.1f", impulse.x, impulse.y);
+                events.emit(events::Damage { hit, fscale * explosion.damage });
+              }
+            }
 
-          // TODO spawn debris
+            // TODO spawn debris
+          }
         });
   }
   m_explosions.clear();
