@@ -1,25 +1,27 @@
 #pragma once
 
-#include <SFML/Graphics/Texture.hpp>
+#include <string>
 
 namespace octo {
 namespace game {
 namespace components {
 
-/*! \brief Component defining a planet, consisting of its terrain mask and texture.
+/*! \brief Component defining a planet.
  *
- *  \todo add atmospheric parameters
+ *  The planets textures are referred to by their ids.
+ *
+ *  \todo add atmospheric parameters (that's for later)
  */
 struct Planet {
-  /*! \brief Texture of the planets background.
+  /*! \brief Texture ID of the planets background.
    *
-   *   It should fill the parts of the planet where terrain is missing,
-   *   but that actually belong to the planet.
+   *  It fills all the parts of the planet that originally belonged to the planet but have holes now.
    */
-  sf::Texture backgroundTexture;
-  /*! \brief Defines the texture of the planets terrain.
+  std::string backgroundTextureId;
+
+  /*! \brief Texture ID of the planets foreground.
    */
-  sf::Texture foregroundTexture;
+  std::string foregroundTextureId;
 };
 
 }
