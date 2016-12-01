@@ -33,6 +33,7 @@ set(SOURCES
   game/events/explode.cpp
   game/systems/attractionsystem.cpp
   game/systems/boundaryenforcer.cpp
+  game/systems/bounce.cpp
   game/systems/collision.cpp
   game/systems/debug.cpp
   game/systems/explosions.cpp

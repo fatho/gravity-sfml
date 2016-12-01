@@ -10,6 +10,8 @@ World::World() {
   // configure entity component system (order is important)
   systems.add<systems::Attraction>();
   systems.add<systems::Collision>(*this);
+  // it's important that bouncing happens immediately after collision detection:
+  systems.add<systems::Bounce>();
   systems.add<systems::Projectiles>();
   systems.add<systems::Explosions>();
   systems.add<systems::HealthSystem>();
@@ -30,7 +32,6 @@ entityx::Entity World::addPlanet(sf::Vector2f position, int radius, float mass) 
       mass * m_gravitationalConstant, components::Attractor::PlanetBit, radius);
 
   planet.assign<components::Planet>();
-  // TODO: load planet textures
 
   planet.assign<components::CollisionMask>(collision::circle(radius, collision::Pixel::SolidDestructible));
   return planet;

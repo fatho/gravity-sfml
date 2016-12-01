@@ -2,6 +2,7 @@
 
 #include "systems/attractionsystem.hpp"
 #include "systems/boundaryenforcer.hpp"
+#include "systems/bounce.hpp"
 #include "systems/collision.hpp"
 #include "systems/debug.hpp"
 #include "systems/explosions.hpp"
