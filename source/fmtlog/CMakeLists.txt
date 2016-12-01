@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 project(fmtlog)
 
 set(SOURCES
-  fmtlog.cpp)
+  fmtlog.cpp
+  fmtlog.hpp)
 
 find_package(Boost 1.62 REQUIRED)
 

@@ -6,7 +6,8 @@ find_package(PhysFS REQUIRED)
 find_package(SFML 2.4 REQUIRED COMPONENTS system)
 
 set(SOURCES
-  physfs.cpp)
+  physfs.cpp
+  physfs.hpp)
 
 add_library(cpp-physfs ${SOURCES})
 target_include_directories(cpp-physfs PRIVATE
