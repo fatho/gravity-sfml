@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(gravity-assets)
 
-add_subdirectory(fonts)
+include("asset_processor.cmake")
+
+add_subdirectory(core)
+add_subdirectory(base)
