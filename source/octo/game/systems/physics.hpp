@@ -3,7 +3,7 @@
 #include "../components/spatial.hpp"
 #include "../components/dynamicbody.hpp"
 #include "../world.hpp"
-#include <fmtlog/fmtlog.hpp> 
+#include <fmtlog/fmtlog.hpp>
 
 #include <entityx/entityx.h>
 
@@ -26,6 +26,10 @@ struct Physics : public entityx::System<Physics> {
   void update(entityx::EntityManager& es, entityx::EventManager& events, entityx::TimeDelta dt) override;
 
 private:
+  /*! \brief Semi-implicit euler integration of movements.
+   *  \brief es Entity manager.
+   *  \brief timeStep The time in seconds since the last update.
+   */
   void integrate(entityx::EntityManager& es, float timeStep);
 
 private:

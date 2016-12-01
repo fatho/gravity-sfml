@@ -31,18 +31,50 @@ using Mask = util::PixelArray<Pixel>;
 
 // some accessors to facilitate later changes in representation
 
+/*! \brief Checks whether a pixel is solid.
+ *
+ *  Only solid pixels participate in the (pixel-perfect) collision detection.
+ */
 inline bool isSolid(Pixel pix) {
   return pix != Pixel::NoCollision;
 }
 
+/*! \brief Checks whether a pixel can be destroyed.
+ *
+ *  Only destructible parts of a collision mask are affected by explosions.
+ */
 inline bool isDestructible(Pixel pix) {
   return pix == Pixel::SolidDestructible;
 }
 
+/*! \brief Creates a circular collision mask.
+ *
+ *  The circle is filled with \p fill, all pixels outside of the circle are set to Pixel::NoCollision.
+  * The  collision mask will be a square with edges of length `2 * radius + 1`.
+ *
+ *  \param radius The radius of the circle.
+ *  \param fill The fill value of the circle.
+ */
 Mask circle(size_t radius, Pixel fill);
 
+/*! \brief Creates a rectangular collision mask.
+ *
+ *  The rectangle is filled with \p fill and it fills the collision mask completely.
+ *
+ *  \param width The width of the collision mask.
+ *  \param height The height of the collision mask.
+ *  \param fill The fill value of the rectangle.
+ */
 Mask rectangle(size_t width, size_t height, Pixel fill);
 
+/*! \brief Creates an elliptical collision mask.
+ *
+ *  The ellipse is filled with \p fill, all pixels outside of the circle are set to Pixel::NoCollision.
+ *
+ *  \param width The width of the collision mask.
+ *  \param height The height of the collision mask.
+ *  \param fill The fill value of the ellipse.
+ */
 Mask ellipse(size_t width, size_t height, Pixel fill);
 
 }
