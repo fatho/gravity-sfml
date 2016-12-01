@@ -15,7 +15,7 @@ set_target_properties(flatbuffers PROPERTIES
 find_program(FLATC flatc)
 
 set(FLATBUFFER_FILES
-  game/serialization/gamestate.fbs
+  game/serialization/worldstate.fbs
   )
 
 foreach(FBS ${FLATBUFFER_FILES})

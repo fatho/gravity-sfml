@@ -19,8 +19,8 @@ table Planet {
   backgroundTexture : string;
 }
 
-table GameState {
+table WorldState {
   planets : [Planet];
 }
 
-root_type GameState;
+root_type WorldState;
